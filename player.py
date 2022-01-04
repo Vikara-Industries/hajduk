@@ -27,12 +27,17 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
         mouse_keys = pygame.mouse.get_pressed()
-
+        if mouse_keys == (False,False,True):
+            self.weapon.aim()
+        elif mouse_keys == (True,False,False):
+            self.weapon.shoot(self.rect.center, pygame.mouse.get_pos())
         if keys[pygame.K_a]: 
             self.x -= self.speed
             self.moving = True
         else: self.moving = False
 
+        if keys[pygame.K_r]:
+            self.weapon.reload()
         if keys[pygame.K_d]: 
             self.x += self.speed
             self.moving = True

@@ -1,5 +1,6 @@
 import pygame, sys
 from player import *
+from weapons import *
 
 def main():
     SCREENW = 800
@@ -11,7 +12,7 @@ def main():
 
     bg = pygame.image.load("bg.png")
     player_group = pygame.sprite.GroupSingle()
-    player = Player(20,50,"gun")
+    player = Player(20,50,Gun())
     player_group.add(player)
 
     while True:
