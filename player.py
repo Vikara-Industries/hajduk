@@ -7,22 +7,21 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.speed = 10
+        self.speed = 5
         self.sneaking = False
         self.weapon = weapon
         #noise should be its own class later, this shit is confusing to read
         self.noise_img = pygame.image.load("noise.png")
         self.noise_rect = self.noise_img.get_rect()
-        self.noise_rect.center = self.rect.center
     
-    def update(self):
+    def update(self, screen):
         self.input()
         self.y += 5
         self.checkCollision()
         self.rect.center = (self.x, self.y)
 
         if self.moving and not self.sneaking:
-            self.make_noise()
+            self.make_noise(screen)
 
 
     def input(self):
@@ -37,10 +36,10 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_d]: 
             self.x += self.speed
             self.moving = True
-        else: self.moving = False
+        
 
         if keys[pygame.K_LCTRL]:
-            self.speed = 3
+            self.speed = 2.5
             self.sneaking = True
         else:
             self.speed = 5
@@ -58,5 +57,6 @@ class Player(pygame.sprite.Sprite):
         elif self.y > 375:
             self.y = 375
             
-    def make_noise(self):
-        pass
+    def make_noise(self, screen):
+        self.noise_rect.center = (self.x, self.y)
+        screen.blit(self.noise_img, self.noise_rect)
