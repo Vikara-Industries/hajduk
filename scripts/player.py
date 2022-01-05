@@ -3,7 +3,19 @@ from pygame import mouse
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, weapon):
         super(Player,self).__init__()
-        self.image = pygame.image.load("../sprites/player.png").convert_alpha()
+
+        #animation
+        self.flip = False
+        self.animation_list = []
+        self.animation_list.append(pygame.image.load("../sprites/hajduk/walk 1.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("../sprites/hajduk/walk 2.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("../sprites/hajduk/walk 3.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("../sprites/hajduk/walk 4.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("../sprites/hajduk/walk 5.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("../sprites/hajduk/walk 6.png").convert_alpha())
+        self.frame_index = 0
+        
+        self.image = self.animation_list[self.frame_index]
         self.image = pygame.transform.scale2x(self.image)
         
         self.rect = self.image.get_rect()
@@ -11,6 +23,7 @@ class Player(pygame.sprite.Sprite):
         self.y = y
         self.speed = 5
         self.sneaking = False
+        self.moving = False
 
 
         self.weapon = weapon
@@ -23,12 +36,23 @@ class Player(pygame.sprite.Sprite):
 
     #seperate the shit that uses screen into a seperate UI class
     def update(self):
+        self.animate()
+
         self.input()
         self.y += 5
         self.checkCollision()
         self.rect.center = (self.x, self.y)
 
+    def animate(self):
+        if self.moving:
+            self.frame_index += 0.2
+            if self.frame_index > len(self.animation_list):
+                self.frame_index = 0
 
+            self.image = self.animation_list[int(self.frame_index)]
+            self.image = pygame.transform.scale2x(self.image)
+            self.image = pygame.transform.flip(self.image, self.flip, False)
+    
     def draw_ui(self,screen):
         if self.moving and not self.sneaking:
             self.make_noise(screen)
@@ -53,18 +77,21 @@ class Player(pygame.sprite.Sprite):
             self.shot = self.weapon.shoot(self.rect.center, pygame.mouse.get_pos())
             
         #else: self.shot = False
+        if keys[pygame.K_d]: 
+            self.x += self.speed
+            self.moving = True
+            self.flip = False
 
-        if keys[pygame.K_a]: 
+        elif keys[pygame.K_a]: 
             self.x -= self.speed
             self.moving = True
+            self.flip = True
+
         else: self.moving = False
 
         if keys[pygame.K_r]:
             self.weapon.reload()
-        if keys[pygame.K_d]: 
-            self.x += self.speed
-            self.moving = True
-        
+
 
         if keys[pygame.K_LCTRL]:
             self.speed = 2.5
