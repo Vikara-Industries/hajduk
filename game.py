@@ -23,7 +23,8 @@ def main():
 
             if event.type == pygame.QUIT: sys.exit()
         screen.blit(bg,(0,0))
-        player_group.update(screen)
+        player_group.update()
+        player.draw_ui(screen)
         player_group.draw(screen)
         pygame.display.update()
         
