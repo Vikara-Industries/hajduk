@@ -3,7 +3,7 @@ from pygame import mouse
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, weapon):
         super(Player,self).__init__()
-        self.image = pygame.image.load("player.png").convert_alpha()
+        self.image = pygame.image.load("../sprites/player.png").convert_alpha()
         self.image = pygame.transform.scale2x(self.image)
         
         self.rect = self.image.get_rect()
@@ -16,7 +16,8 @@ class Player(pygame.sprite.Sprite):
         self.weapon = weapon
         self.shot = False
         #noise should be its own class later, this shit is confusing to read
-        self.noise_img = pygame.image.load("noise.png")
+        self.noise_img = pygame.image.load("../sprites/noise.png")
+        self.noise_img = pygame.transform.scale2x(self.noise_img)
         self.noise_rect = self.noise_img.get_rect()
     
 
@@ -31,6 +32,7 @@ class Player(pygame.sprite.Sprite):
     def draw_ui(self,screen):
         if self.moving and not self.sneaking:
             self.make_noise(screen)
+            self.weapon.spread = self.weapon.spread_max
 
         if self.aiming:
             pygame.draw.line(screen,(255,0,0),self.rect.center, (mouse.get_pos()[0] ,mouse.get_pos()[1] + self.weapon.spread/5))
