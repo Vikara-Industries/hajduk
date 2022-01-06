@@ -53,11 +53,15 @@ class Player(pygame.sprite.Sprite):
         #self.noise_img = pygame.transform.scale2x(self.noise_img)
         self.noise_img = pygame.transform.rotozoom(self.noise_img,0,2)
         self.noise_rect = self.noise_img.get_rect()
-    
+
 
     #seperate the shit that uses screen into a seperate UI class
     def update(self,level):
         if self.shooting:
+            if self.shooting_freeze == 0:
+                for block in level:
+                    shootline = block.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
+                    if shootline: self.shot = shootline[0]
             self.shooting_freeze += self.anim_speed
             if self.shooting_freeze > len(self.shooting_anim):
                 self.shooting = False
@@ -108,11 +112,14 @@ class Player(pygame.sprite.Sprite):
         if mouse_keys[2] == True:
             self.aiming = True
             self.weapon.aim()
-        else: self.aiming = False
+        else: 
+            self.aiming = False
+            self.weapon.spread = self.weapon.spread_max
 
         if mouse_keys[0] == True:
-            self.shooting = True
-            self.shot = self.weapon.shoot(self.rect.center, pygame.mouse.get_pos())
+            if self.weapon.loaded:
+                self.shooting = True
+                self.shot = self.weapon.shoot(self.rect.center, pygame.mouse.get_pos())
             
 
         if keys[pygame.K_d]: 

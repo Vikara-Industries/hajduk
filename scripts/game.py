@@ -1,11 +1,9 @@
 import pygame, sys
 from player import *
 from weapons import *
-<<<<<<< HEAD
-from Enemy import *
-=======
+#from Enemy import *
 from interactable import *
->>>>>>> d209ecff28930f90aee629eda0ec2566a29c07c1
+
 
 block = "../sprites/ground.png"
 class Tile(pygame.sprite.Sprite):
