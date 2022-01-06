@@ -1,6 +1,8 @@
 import pygame
 
-class Hiding_spot(pygame.sprite.Sprite):
+class Hide(pygame.sprite.Sprite):
     def __init__(self, x, y):
-        super(Hiding_spot,self).__init__()
-        
+        super(Hide,self).__init__()
+        self.image = pygame.image.load("../sprites/interactables/Hide.png")
+        self.rect = self.image.get_rect()
+        self.rect.bottomleft = (x,y)

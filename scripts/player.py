@@ -7,23 +7,25 @@ class Player(pygame.sprite.Sprite):
 
         #animation
         self.flip = False
-        self.animation_list = [pygame.image.load("../sprites/hajduk/idle.png").convert_alpha()]
+        self.animation_list = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
 
-        self.idle = [pygame.image.load("../sprites/hajduk/idle.png").convert_alpha(),pygame.image.load("../sprites/hajduk/idle.png").convert_alpha()]
+        self.idle = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha(),pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
 
         self.aiming = False
-        self.aim = [pygame.image.load("../sprites/hajduk/aiming.png").convert_alpha(),pygame.image.load("../sprites/hajduk/aiming.png").convert_alpha()]
+        self.aim = [pygame.image.load("../sprites/turk/aim.png").convert_alpha(),pygame.image.load("../sprites/turk/aim.png").convert_alpha()]
         
         self.moving = False
         self.walking = []
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 1.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 2.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 3.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/aiming.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 4.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 5.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 6.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/turk/walk 1.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/turk/walk 2.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/turk/walk 3.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/turk/walk 4.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/turk/walk 5.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/turk/walk 6.png").convert_alpha())
 
+        self.shooting = False
+        self.shooting_anim = []
+        
         self.frame_index = 0
         
         self.image = self.animation_list[self.frame_index]
@@ -41,15 +43,16 @@ class Player(pygame.sprite.Sprite):
         self.shot = False
         #noise should be its own class later, this shit is confusing to read
         self.noise_img = pygame.image.load("../sprites/noise.png")
-        self.noise_img = pygame.transform.scale2x(self.noise_img)
+        #self.noise_img = pygame.transform.scale2x(self.noise_img)
+        self.noise_img = pygame.transform.rotozoom(self.noise_img,0,2)
         self.noise_rect = self.noise_img.get_rect()
     
 
     #seperate the shit that uses screen into a seperate UI class
     def update(self,level):
+        if not self.shooting:
+            self.input()
         self.animate()
-
-        self.input()
         self.y += 5
         self.checkCollision(level)
         self.rect.center = (self.x, self.y)
