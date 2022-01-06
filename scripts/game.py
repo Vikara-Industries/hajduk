@@ -26,7 +26,7 @@ def main():
     SCREENW = 800
     SCREENH = SCREENW* 0.6
 
-    GROUND = [Tile(floor,0,480,SCREENW,105), Tile(lplat,0,210,250,33),Tile(rplat,550,210,250,33)]
+    GROUND = [Tile(floor,0,480,SCREENW,105), Tile(lplat,0,210,250,46),Tile(rplat,550,210,250,46)]
 
     pygame.init()
     clock = pygame.time.Clock()
