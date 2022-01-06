@@ -22,14 +22,8 @@ class Tile(pygame.sprite.Sprite):
         self.rect.bottomleft = (x,y)
 
 
-<<<<<<< HEAD
 
-LEVEL0 = [Tile(block,0,450),Tile(block,50,450),Tile(block,100,450),Tile(block,150,450),Tile(block,200,450)]
-LEVEL0.append(Hide(100,400))
-GROUND = [Tile(block,0,430),Tile(block,300,430),Tile(block,600,430),Tile(block,0,220),Tile(block,500,220)]
 
-=======
->>>>>>> 2fe79df4ee418e99bd3ad6cf924d6666fcc3a546
 
 
 def main():
@@ -43,7 +37,6 @@ def main():
     screen = pygame.display.set_mode((SCREENW,SCREENH))
 
 
-<<<<<<< HEAD
     random_spawn_timer = random.randint(1000,9000)
     enemy_movment = pygame.USEREVENT +1
 
@@ -57,17 +50,11 @@ def main():
 
 
 
-
-
-    bg = pygame.image.load("../sprites/bg.png")
-
-=======
     bg = pygame.image.load("../sprites/background.png").convert()
     bg = pygame.transform.smoothscale(bg,(SCREENW,SCREENH))
->>>>>>> 2fe79df4ee418e99bd3ad6cf924d6666fcc3a546
     level_group = pygame.sprite.Group()
 
-    for tile in LEVEL0:
+    for tile in GROUND:
         level_group.add(tile)
 
     player_group = pygame.sprite.GroupSingle()
@@ -86,11 +73,8 @@ def main():
 
         screen.blit(bg,(0,0))
         level_group.draw(screen)
-<<<<<<< HEAD
-        player_group.update(LEVEL0)
-=======
         player_group.update()
->>>>>>> 2fe79df4ee418e99bd3ad6cf924d6666fcc3a546
+        player_group.update()
         player.draw_ui(screen)
         player_group.draw(screen)
 
