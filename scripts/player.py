@@ -2,9 +2,9 @@ from os import path
 import pygame
 from pygame import mouse
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, weapon):
+    def __init__(self, level, x, y, weapon):
         super(Player,self).__init__()
-
+        self.level = level
         #animation
         self.anim_speed = 0.2
         self.flip = False
@@ -53,12 +53,12 @@ class Player(pygame.sprite.Sprite):
         self.ammo = 5
         self.reloading = False
 
+    
 
-    #seperate the shit that uses screen into a seperate UI class
-    def update(self,level):
+    def update(self):
         if self.shooting:
             if self.shooting_freeze == 0:
-                for block in level:
+                for block in self.level:
                     shootline = block.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
                     if shootline: self.shot = shootline[0]
             self.shooting_freeze += self.anim_speed
@@ -69,7 +69,7 @@ class Player(pygame.sprite.Sprite):
             self.input()
         self.animate()
         self.y += 5
-        self.checkCollision(level)
+        self.checkCollision(self.level)
         self.rect.center = (self.x, self.y)
 
     def animate(self):
@@ -103,6 +103,12 @@ class Player(pygame.sprite.Sprite):
         
         if self.shot:
             pygame.draw.circle(screen, (255,100,200), self.shot,3,2)
+    
+    #shooting related stuff
+    def fire(self):
+        self.shooting = True
+        self.shot = self.weapon.shoot(self.rect.center, pygame.mouse.get_pos())
+
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -117,9 +123,6 @@ class Player(pygame.sprite.Sprite):
         if mouse_keys[0] == True:
             if self.weapon.loaded:
                 self.fire()
-                self.shooting = True
-                self.shot = self.weapon.shoot(self.rect.center, pygame.mouse.get_pos())
-            
 
         if keys[pygame.K_d]: 
             self.x += self.speed
@@ -137,23 +140,23 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_r]:
             if self.ammo > 0:
-                self.weapon.reload()
-                self.ammo -=1
-                
+                self.reload()
+
 
         if keys[pygame.K_LCTRL]:
             self.speed = 2.5
             self.sneaking = True
+        
         else:
             self.speed = 5
             self.sneaking = False
+
+    def reload(self):
+        self.weapon.reload()
+        self.ammo -=1
 
 
     def checkCollision(self, level):
         if pygame.sprite.spritecollideany(self, level) != None:
             
             self.y -= 5
-
-    def make_noise(self, screen):
-        self.noise_rect.center = (self.x, self.y)
-        screen.blit(self.noise_img, self.noise_rect)
