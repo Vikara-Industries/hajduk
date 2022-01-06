@@ -5,6 +5,7 @@ import random
 import time
 
 
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super(Enemy,self).__init__()
@@ -53,7 +54,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect(midbottom = (300,400))
         self.speed = 3
-
+        self.bilosta = []
         #self.weapon = weapons
 
 
@@ -77,14 +78,21 @@ class Enemy(pygame.sprite.Sprite):
 
 
 
-    def Enemy_movment(self):
-            walk = random.randint(0,1)
-            if walk == 1:
-                self.rect.x += 5
-                self.walking = True
-            elif walk == 0:
-                self.rect.x -= 5
-                self.walking = True
+    def Enemy_movment(self,bilosta):
+                walk = random.randint(0,1)
+                bilosta.append(walk)
+                if bilosta[0] == 1:
+                    self.rect.x += 2
+                    self.walking = True
+                    #print(bilosta)
+                    if len(bilosta)/60 > 2:
+                        bilosta.clear()
+                elif bilosta[0] == 0:
+                    self.rect.x -= 2
+                    #self.image = pygame.transform.flip(self.image,self.flip, False)
+                    self.walking = True
+                    if len(bilosta)/60 > 2:
+                        bilosta.clear()
 
 
     def checkCollision(self, level):
@@ -100,7 +108,9 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def update(self):
-        self.Enemy_movment()
+        Time = pygame.time.get_ticks()
+        start_time = 0
+        self.Enemy_movment(self.bilosta)
         self.animation()
 
         pass

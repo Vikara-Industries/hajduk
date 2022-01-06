@@ -38,7 +38,6 @@ def main():
 
 
     random_spawn_timer = random.randint(1000,9000)
-    enemy_movment = pygame.USEREVENT +1
 
     enemy_spawner = pygame.USEREVENT +2
 
@@ -74,11 +73,10 @@ def main():
         screen.blit(bg,(0,0))
         level_group.draw(screen)
         player_group.update()
-        player_group.update()
         player.draw_ui(screen)
         player_group.draw(screen)
 
-        print(enemy_group)
+        #print(enemy_group)
         enemy_group.draw(screen)
         enemy_group.update()
 

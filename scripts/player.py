@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
 
         self.aiming = False
         self.aim = [pygame.image.load("../sprites/hajduk/aim.png").convert_alpha(),pygame.image.load("../sprites/hajduk/aim.png").convert_alpha()]
-        
+
         self.moving = False
         self.walking = []
         self.walking.append(pygame.image.load("../sprites/hajduk/walk 1.png").convert_alpha())
@@ -32,9 +32,9 @@ class Player(pygame.sprite.Sprite):
         self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 3.png").convert_alpha())
         self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 4.png").convert_alpha())
         self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 5.png").convert_alpha())
-        
+
         self.frame_index = 0
-        
+
         self.image = self.animation_list[self.frame_index]
         self.image = pygame.transform.scale2x(self.image)
         self.rect = self.image.get_rect()
@@ -53,7 +53,7 @@ class Player(pygame.sprite.Sprite):
         self.ammo = 5
         self.reloading = False
 
-    
+
 
     def update(self):
         if self.shooting:
@@ -79,11 +79,11 @@ class Player(pygame.sprite.Sprite):
         elif self.moving:
             self.animation_list = self.walking
             self.weapon.spread_min = 160
-        elif self.aiming: 
+        elif self.aiming:
             self.animation_list = self.aim
             self.weapon.spread_min = 40
         else: self.animation_list = self.idle
-        
+
         self.frame_index += self.anim_speed
         if self.frame_index > len(self.animation_list):
             self.frame_index = 0
@@ -100,10 +100,10 @@ class Player(pygame.sprite.Sprite):
         if self.aiming:
             pygame.draw.line(screen,(255,0,0),self.rect.center, (mouse.get_pos()[0] ,mouse.get_pos()[1] + self.weapon.spread/5))
             pygame.draw.line(screen,(255,0,0),self.rect.center, (mouse.get_pos()[0] ,mouse.get_pos()[1] - self.weapon.spread/5))
-        
+
         if self.shot:
             pygame.draw.circle(screen, (255,100,200), self.shot,3,2)
-    
+
     #shooting related stuff
     def fire(self):
         self.shooting = True
@@ -116,7 +116,7 @@ class Player(pygame.sprite.Sprite):
         if mouse_keys[2] == True:
             self.aiming = True
             self.weapon.aim()
-        else: 
+        else:
             self.aiming = False
             self.weapon.spread = self.weapon.spread_max
 
@@ -124,17 +124,17 @@ class Player(pygame.sprite.Sprite):
             if self.weapon.loaded:
                 self.fire()
 
-        if keys[pygame.K_d]: 
+        if keys[pygame.K_d]:
             self.x += self.speed
             self.moving = True
             self.flip = False
 
-        elif keys[pygame.K_a]: 
+        elif keys[pygame.K_a]:
             self.x -= self.speed
             self.moving = True
             self.flip = True
 
-        else: 
+        else:
             self.moving = False
 
 
@@ -146,7 +146,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_LCTRL]:
             self.speed = 2.5
             self.sneaking = True
-        
+
         else:
             self.speed = 5
             self.sneaking = False
@@ -158,5 +158,5 @@ class Player(pygame.sprite.Sprite):
 
     def checkCollision(self, level):
         if pygame.sprite.spritecollideany(self, level) != None:
-            
+
             self.y -= 5
