@@ -10,14 +10,16 @@ class Gun():
 
     def aim(self):
         if self.spread > self.spread_min:
-            self.spread -= 5
+            self.spread -= 8
+        elif self.spread < self.spread_min:
+            self.spread = self.spread_min
 
     def shoot(self,startpoint, endpoint):
         if self.loaded:
 
             #add raycast collision check
              
-            distance = abs(startpoint[0] - endpoint[0])
+            distance = abs(startpoint[0] - endpoint[0]) + abs(startpoint[1] - endpoint[1])
             shot_spread = random.randrange(-distance*self.spread, distance*self.spread)/1000
             
             self.spread = self.spread_max

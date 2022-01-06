@@ -11,11 +11,13 @@ class Tile(pygame.sprite.Sprite):
         self.rect.topleft = (x,y)
 
 
-LEVEL0 = [Tile(block,0,400),]
+LEVEL0 = [Tile(block,0,350),Tile(block,50,350),Tile(block,100,350),Tile(block,150,350),Tile(block,200,350)]
+
+
 
 def main():
     SCREENW = 800
-    SCREENH = 600
+    SCREENH = SCREENW* 0.6
 
     pygame.init()
     clock = pygame.time.Clock()
@@ -39,11 +41,12 @@ def main():
         for event in pygame.event.get():
             
             if event.type == pygame.QUIT: sys.exit()
+        
         screen.blit(bg,(0,0))
-        player_group.update()
+        level_group.draw(screen)
+        player_group.update(LEVEL0)
         player.draw_ui(screen)
         player_group.draw(screen)
-        level_group.draw(screen)
 
         pygame.display.update()
         
