@@ -1,11 +1,10 @@
 import pygame, sys
 from player import *
 from weapons import *
-<<<<<<< HEAD
 from Enemy import *
-=======
+
 from interactable import *
->>>>>>> d209ecff28930f90aee629eda0ec2566a29c07c1
+
 
 block = "../sprites/ground.png"
 class Tile(pygame.sprite.Sprite):
@@ -16,7 +15,8 @@ class Tile(pygame.sprite.Sprite):
         self.rect.bottomleft = (x,y)
 
 
-GROUND = [Tile(block,0,480),Tile(block,300,480),Tile(block,600,480),Tile(block,0,150),Tile(block,500,150)]
+LEVEL0 = [Tile(block,0,450),Tile(block,50,450),Tile(block,100,450),Tile(block,150,450),Tile(block,200,450)]
+LEVEL0.append(Hide(100,400))
 
 
 def main():
@@ -28,11 +28,26 @@ def main():
     screen = pygame.display.set_mode((SCREENW,SCREENH))
 
 
+    random_spawn_timer = random.randint(1000,9000)
+    enemy_movment = pygame.USEREVENT +1
+
+    enemy_spawner = pygame.USEREVENT +2
+
+    pygame.time.set_timer(enemy_spawner,random_spawn_timer)
+    enemy_group = pygame.sprite.Group()
+
+
+
+
+
+
+
+
     bg = pygame.image.load("../sprites/bg.png")
 
     level_group = pygame.sprite.Group()
 
-    for tile in GROUND:
+    for tile in LEVEL0:
         level_group.add(tile)
 
     player_group = pygame.sprite.GroupSingle()
@@ -46,11 +61,20 @@ def main():
 
             if event.type == pygame.QUIT: sys.exit()
 
+            if event.type == enemy_spawner:
+                enemy_group.add(Enemy())
+
         screen.blit(bg,(0,0))
         level_group.draw(screen)
-        player_group.update(GROUND)
+        player_group.update(LEVEL0)
         player.draw_ui(screen)
         player_group.draw(screen)
+
+        print(enemy_group)
+        enemy_group.draw(screen)
+        enemy_group.update()
+
+
 
         pygame.display.update()
 
