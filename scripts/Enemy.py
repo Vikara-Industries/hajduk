@@ -51,18 +51,19 @@ class Enemy(pygame.sprite.Sprite):
         self.filp = False
 
 
-        self.rect = self.image.get_rect(midbottom = (300,300))
+        self.rect = self.image.get_rect(midbottom = (300,400))
         self.speed = 3
 
         #self.weapon = weapons
 
 
     def animation(self):
-        self.anim_speed += self.anim_speed
+        self.animation_index += self.anim_speed
         #self.image = self.enemy_stand
         if self.walking:
+
             if self.animation_index >= len(self.enemy_walk):
-                self.animation =0
+                self.animation_index =0
             self.image = self.enemy_walk[int(self.animation_index)]
 
         elif self.shooting:
