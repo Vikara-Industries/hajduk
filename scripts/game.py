@@ -16,8 +16,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect.bottomleft = (x,y)
 
 
-LEVEL0 = [Tile(block,0,450),Tile(block,50,450),Tile(block,100,450),Tile(block,150,450),Tile(block,200,450)]
-LEVEL0.append(Hide(100,400))
+GROUND = [Tile(block,0,480),Tile(block,300,480),Tile(block,600,480),Tile(block,0,150),Tile(block,500,150)]
 
 
 def main():
@@ -33,7 +32,7 @@ def main():
 
     level_group = pygame.sprite.Group()
 
-    for tile in LEVEL0:
+    for tile in GROUND:
         level_group.add(tile)
 
     player_group = pygame.sprite.GroupSingle()
@@ -49,7 +48,7 @@ def main():
 
         screen.blit(bg,(0,0))
         level_group.draw(screen)
-        player_group.update(LEVEL0)
+        player_group.update(GROUND)
         player.draw_ui(screen)
         player_group.draw(screen)
 

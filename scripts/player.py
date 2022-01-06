@@ -6,25 +6,32 @@ class Player(pygame.sprite.Sprite):
         super(Player,self).__init__()
 
         #animation
+        self.anim_speed = 0.2
         self.flip = False
-        self.animation_list = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
+        self.animation_list = [pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha()]
 
-        self.idle = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha(),pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
+        self.idle = [pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha(),pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha()]
 
         self.aiming = False
-        self.aim = [pygame.image.load("../sprites/turk/aim.png").convert_alpha(),pygame.image.load("../sprites/turk/aim.png").convert_alpha()]
+        self.aim = [pygame.image.load("../sprites/hajduk/aim.png").convert_alpha(),pygame.image.load("../sprites/hajduk/aim.png").convert_alpha()]
         
         self.moving = False
         self.walking = []
-        self.walking.append(pygame.image.load("../sprites/turk/walk 1.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 2.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 3.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 4.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 5.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 6.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/hajduk/walk 1.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/hajduk/walk 2.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/hajduk/walk 3.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/hajduk/walk 4.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/hajduk/walk 5.png").convert_alpha())
+        self.walking.append(pygame.image.load("../sprites/hajduk/walk 6.png").convert_alpha())
 
         self.shooting = False
+        self.shooting_freeze = 0
         self.shooting_anim = []
+        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 1.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 2.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 3.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 4.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 5.png").convert_alpha())
         
         self.frame_index = 0
         
@@ -50,7 +57,12 @@ class Player(pygame.sprite.Sprite):
 
     #seperate the shit that uses screen into a seperate UI class
     def update(self,level):
-        if not self.shooting:
+        if self.shooting:
+            self.shooting_freeze += self.anim_speed
+            if self.shooting_freeze > len(self.shooting_anim):
+                self.shooting = False
+                self.shooting_freeze = 0
+        else:
             self.input()
         self.animate()
         self.y += 5
@@ -58,15 +70,18 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (self.x, self.y)
 
     def animate(self):
-        if self.moving:
-             self.animation_list = self.walking
-             self.weapon.spread_min = 160
+
+        if self.shooting:
+            self.animation_list = self.shooting_anim
+        elif self.moving:
+            self.animation_list = self.walking
+            self.weapon.spread_min = 160
         elif self.aiming: 
             self.animation_list = self.aim
             self.weapon.spread_min = 40
         else: self.animation_list = self.idle
         
-        self.frame_index += 0.2
+        self.frame_index += self.anim_speed
         if self.frame_index > len(self.animation_list):
             self.frame_index = 0
 
@@ -96,6 +111,7 @@ class Player(pygame.sprite.Sprite):
         else: self.aiming = False
 
         if mouse_keys[0] == True:
+            self.shooting = True
             self.shot = self.weapon.shoot(self.rect.center, pygame.mouse.get_pos())
             
 
