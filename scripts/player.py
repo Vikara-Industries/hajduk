@@ -37,8 +37,9 @@ class Player(pygame.sprite.Sprite):
         
         self.image = self.animation_list[self.frame_index]
         self.image = pygame.transform.scale2x(self.image)
-        
         self.rect = self.image.get_rect()
+
+
         self.x = x
         self.y = y
         self.speed = 5
@@ -48,11 +49,9 @@ class Player(pygame.sprite.Sprite):
 
         self.weapon = weapon
         self.shot = False
-        #noise should be its own class later, this shit is confusing to read
-        self.noise_img = pygame.image.load("../sprites/noise.png")
-        #self.noise_img = pygame.transform.scale2x(self.noise_img)
-        self.noise_img = pygame.transform.rotozoom(self.noise_img,0,2)
-        self.noise_rect = self.noise_img.get_rect()
+
+        self.ammo = 5
+        self.reloading = False
 
 
     #seperate the shit that uses screen into a seperate UI class
@@ -96,7 +95,6 @@ class Player(pygame.sprite.Sprite):
 
     def draw_ui(self,screen):
         if self.moving and not self.sneaking:
-            self.make_noise(screen)
             self.weapon.spread = self.weapon.spread_max
 
         if self.aiming:
@@ -118,6 +116,7 @@ class Player(pygame.sprite.Sprite):
 
         if mouse_keys[0] == True:
             if self.weapon.loaded:
+                self.fire()
                 self.shooting = True
                 self.shot = self.weapon.shoot(self.rect.center, pygame.mouse.get_pos())
             
@@ -137,7 +136,10 @@ class Player(pygame.sprite.Sprite):
 
 
         if keys[pygame.K_r]:
-            self.weapon.reload()
+            if self.ammo > 0:
+                self.weapon.reload()
+                self.ammo -=1
+                
 
         if keys[pygame.K_LCTRL]:
             self.speed = 2.5

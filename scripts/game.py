@@ -14,7 +14,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect.bottomleft = (x,y)
 
 
-GROUND = [Tile(block,0,480),Tile(block,300,480),Tile(block,600,480),Tile(block,0,150),Tile(block,500,150)]
+GROUND = [Tile(block,0,430),Tile(block,300,430),Tile(block,600,430),Tile(block,0,220),Tile(block,500,220)]
 
 
 def main():
