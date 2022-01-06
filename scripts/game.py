@@ -1,6 +1,7 @@
 import pygame, sys
 from player import *
 from weapons import *
+from interactable import *
 
 block = "../sprites/ground.png"
 class Tile(pygame.sprite.Sprite):
@@ -8,11 +9,11 @@ class Tile(pygame.sprite.Sprite):
         super(Tile,self).__init__()
         self.image = pygame.image.load(img)
         self.rect = self.image.get_rect()
-        self.rect.topleft = (x,y)
+        self.rect.bottomleft = (x,y)
 
 
-LEVEL0 = [Tile(block,0,350),Tile(block,50,350),Tile(block,100,350),Tile(block,150,350),Tile(block,200,350)]
-
+LEVEL0 = [Tile(block,0,450),Tile(block,50,450),Tile(block,100,450),Tile(block,150,450),Tile(block,200,450)]
+LEVEL0.append(Hide(100,400))
 
 
 def main():
