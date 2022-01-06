@@ -1,6 +1,7 @@
 import pygame, sys
 from player import *
 from weapons import *
+from Enemy import *
 
 block = "../sprites/ground.png"
 class Tile(pygame.sprite.Sprite):
@@ -39,9 +40,9 @@ def main():
         clock.tick(60)
 
         for event in pygame.event.get():
-            
+
             if event.type == pygame.QUIT: sys.exit()
-        
+
         screen.blit(bg,(0,0))
         level_group.draw(screen)
         player_group.update(LEVEL0)
@@ -49,5 +50,5 @@ def main():
         player_group.draw(screen)
 
         pygame.display.update()
-        
+
 main()
