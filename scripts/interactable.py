@@ -38,4 +38,7 @@ class Portal(pygame.sprite.Sprite):
             player.y += 220
 
 
-    
+class Ammo_box(pygame.sprite.Sprite):
+    pass
+class Hp_box(pygame.sprite.Sprite):
+    pass

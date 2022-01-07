@@ -57,7 +57,7 @@ class Player(pygame.sprite.Sprite):
 
         self.interact_with = None
         self.interact_timer = pygame.time.get_ticks()
-        self.interact_cooldown = 1000
+        self.interact_cooldown = 800
 
 
 
