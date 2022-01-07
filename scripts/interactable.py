@@ -1,6 +1,6 @@
 import pygame
 
-prompt = pygame.image.load("../sprites/interactables/prompt.png") 
+prompt = pygame.image.load("../sprites/interactables/prompt.png")
 
 class Hide(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -36,6 +36,3 @@ class Portal(pygame.sprite.Sprite):
             player.y -= 220
         else:
             player.y += 220
-
-
-    

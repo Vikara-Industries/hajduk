@@ -14,6 +14,8 @@ floor = "../sprites/floor.png"
 lplat = "../sprites/left platform.png"
 rplat = "../sprites/right platform.png"
 
+
+
 class Tile(pygame.sprite.Sprite):
     def __init__(self,img,x,y,sx,sy):
         super(Tile,self).__init__()
@@ -38,7 +40,7 @@ def main():
     screen = pygame.display.set_mode((SCREENW,SCREENH))
 
 
-    random_spawn_timer = random.randint(1000,9000)
+    random_spawn_timer = random.randint(3000,4000)
 
     enemy_spawner = pygame.USEREVENT +2
 
@@ -63,6 +65,11 @@ def main():
     player = Player(GROUND,20,50,Gun())
     player_group.add(player)
 
+
+
+
+
+    spawn_counter = 0
     while True:
         clock.tick(60)
 
@@ -71,9 +78,12 @@ def main():
             if event.type == pygame.QUIT: sys.exit()
 
             if event.type == enemy_spawner:
-                enemy_group.add(Enemy())
+                spawn_counter +=1
+                #print(spawn_counter)
+                enemy_group.add(Enemy(spawn_counter))
+                spawn_counter -= 1
 
-        
+
 
         screen.blit(bg,(0,0))
         level_group.draw(screen)
@@ -82,14 +92,20 @@ def main():
         player.draw_ui(screen)
         player_group.draw(screen)
 
+
+
+        #print(len(position_enemy))
+
         player.interact_with = pygame.sprite.spritecollideany(player, interact_group)
 
         if player.interact_with:
             player.interact_with.draw_prompt(screen)
 
         #print(enemy_group)
-        enemy_group.draw(screen)
         enemy_group.update()
+        enemy_group.draw(screen)
+
+
 
 
 

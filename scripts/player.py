@@ -92,7 +92,7 @@ class Player(pygame.sprite.Sprite):
             self.hiding = False
             self.animation_list = self.walking
             self.weapon.spread_min = 160
-            
+
         elif self.aiming:
             self.hiding = False
             self.animation_list = self.aim
