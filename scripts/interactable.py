@@ -1,6 +1,6 @@
 import pygame
 
-prompt = pygame.image.load("../sprites/interactables/prompt.png") 
+prompt = pygame.image.load("../sprites/interactables/prompt.png")
 
 class Hide(pygame.sprite.Sprite):
     def __init__(self, x, y):
