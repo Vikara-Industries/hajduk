@@ -46,16 +46,21 @@ class Player(pygame.sprite.Sprite):
 
         self.sneaking = False
 
+        self.hiding = False
 
         self.weapon = weapon
         self.shot = False
 
         self.ammo = 5
         self.reloading = False
+        self.reload_timer = 0
 
 
 
     def update(self):
+
+        if self.reloading:
+            self.reload()
         if self.shooting:
             if self.shooting_freeze == 0:
                 for block in self.level:
@@ -65,8 +70,15 @@ class Player(pygame.sprite.Sprite):
             if self.shooting_freeze > len(self.shooting_anim):
                 self.shooting = False
                 self.shooting_freeze = 0
+
+        elif self.hiding:
+            keys = pygame.key.get_pressed()
+
+            if keys[pygame.K_r]:
+                self.reloading = True
         else:
             self.input()
+
         self.animate()
         self.y += 5
         self.checkCollision(self.level)
@@ -139,8 +151,7 @@ class Player(pygame.sprite.Sprite):
 
 
         if keys[pygame.K_r]:
-            if self.ammo > 0:
-                self.reload()
+            self.reloading = True
 
 
         if keys[pygame.K_LCTRL]:
@@ -152,8 +163,19 @@ class Player(pygame.sprite.Sprite):
             self.sneaking = False
 
     def reload(self):
-        self.weapon.reload()
-        self.ammo -=1
+        if self.ammo > 0:
+            if self.reload_timer/60 < 2:
+                self.reload_timer += 1
+            else:
+                self.weapon.reload()
+                self.ammo -=1
+                print(self.ammo)
+                self.reload_timer = 0
+                self.reloading = False
+        else:
+            print("no ammo")
+            self.reloading = False
+
 
 
     def checkCollision(self, level):
