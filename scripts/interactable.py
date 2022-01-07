@@ -8,7 +8,7 @@ class Hide(pygame.sprite.Sprite):
         self.image = pygame.image.load("../sprites/interactables/Hide.png")
         self.rect = self.image.get_rect()
         self.rect.bottomleft = (x,y)
-        self.prompt_pos = (self.rect.center[0], self.rect.center[1] - 20)
+        self.prompt_pos = (self.rect.center[0]-20, self.rect.center[1] - 20)
 
     def update(self):
         pass
@@ -17,6 +17,25 @@ class Hide(pygame.sprite.Sprite):
 
     def interact(self, player):
         player.hiding = True
+
+class Portal(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super(Portal,self).__init__()
+        self.image = pygame.image.load("../sprites/interactables/portal.png")
+        self.rect = self.image.get_rect()
+        self.rect.bottomleft = (x,y)
+        self.prompt_pos = (self.rect.center[0]-20, self.rect.center[1] - 20)
+
+    def update(self):
+        pass
+    def draw_prompt(self,screen):
+        screen.blit(prompt,self.prompt_pos)
+
+    def interact(self, player):
+        if player.y > 150:
+            player.y -= 220
+        else:
+            player.y += 220
 
 
     

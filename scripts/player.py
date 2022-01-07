@@ -51,9 +51,13 @@ class Player(pygame.sprite.Sprite):
         self.weapon = weapon
         self.shot = False
 
-        self.ammo = 5
+        self.ammo = 100
         self.reloading = False
         self.reload_timer = 0
+
+        self.interact_with = None
+        self.interact_timer = pygame.time.get_ticks()
+        self.interact_cooldown = 1000
 
 
 
@@ -71,11 +75,6 @@ class Player(pygame.sprite.Sprite):
                 self.shooting = False
                 self.shooting_freeze = 0
 
-        elif self.hiding:
-            keys = pygame.key.get_pressed()
-
-            if keys[pygame.K_r]:
-                self.reloading = True
         else:
             self.input()
 
@@ -88,10 +87,14 @@ class Player(pygame.sprite.Sprite):
 
         if self.shooting:
             self.animation_list = self.shooting_anim
+            self.hiding = False
         elif self.moving:
+            self.hiding = False
             self.animation_list = self.walking
             self.weapon.spread_min = 160
+            
         elif self.aiming:
+            self.hiding = False
             self.animation_list = self.aim
             self.weapon.spread_min = 40
         else: self.animation_list = self.idle
@@ -145,6 +148,12 @@ class Player(pygame.sprite.Sprite):
             self.x -= self.speed
             self.moving = True
             self.flip = True
+
+        elif keys[pygame.K_w]:
+            print(pygame.time.get_ticks() - self.interact_timer)
+            if self.interact_with and (pygame.time.get_ticks() - self.interact_timer > self.interact_cooldown):
+                self.interact_with.interact(self)
+                self.interact_timer = pygame.time.get_ticks()
 
         else:
             self.moving = False
