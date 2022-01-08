@@ -5,17 +5,17 @@ class Enemy(pygame.sprite.Sprite):
         super(Enemy,self).__init__()
         #animation
         if y > 300:
-            self.xrange =(0,800)
+            self.xrange =(40,810)
         elif x< 100:
-            self.xrange =(0,275)
+            self.xrange =(40,280)
         else:
-            self.xrange =(530,800)
+            self.xrange =(570,810)
         self.anim_speed = 0.2
         self.flip = False
         self.animation_list = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
 
         self.idle = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha(),pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
-
+        self.stand_timer = 0
         self.aiming = False
         self.aim = [pygame.image.load("../sprites/turk/aim.png").convert_alpha(),pygame.image.load("../sprites/turk/aim.png").convert_alpha()]
 
@@ -53,8 +53,7 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def update(self,player,level):
-        if self.reloading:
-            self.reload()
+
         if self.shooting:
             self.shooting_freeze += self.anim_speed
             if self.shooting_freeze > len(self.shooting_anim):
@@ -77,14 +76,14 @@ class Enemy(pygame.sprite.Sprite):
 
         if self.shooting:
             self.animation_list = self.shooting_anim
-            self.hiding = False
+            
+            
         elif self.moving:
-            self.hiding = False
+            
             self.animation_list = self.walking
 
-
         elif self.aiming:
-            self.hiding = False
+            
             self.animation_list = self.aim
 
         else: self.animation_list = self.idle
@@ -97,12 +96,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale2x(self.image)
         self.image = pygame.transform.flip(self.image, self.flip, False)
 
-    def reload(self):
 
-        if self.reload_timer/60 < 2:
-            self.reload_timer += 1
-        else:
-            self.shooting = True
     def fire(self, player):
         self.shooting = True
         shot = random.randrange(0,9)
@@ -110,28 +104,48 @@ class Enemy(pygame.sprite.Sprite):
             player.hp -= 1
 
     def patrol(self):
-        pass
+        self.moving = True
+
+        if self.xrange[0]< self.x <self.xrange[1]:
+            if self.flip:
+                self.x -= 2
+            else:
+                self.x += 2
+        else:
+            self.moving = False
+            if self.stand_timer/100 < 2:
+                     self.stand_timer += 1
+            else:
+                self.stand_timer = 0
+                self.flip = True
+                if self.x >= self.xrange[1]: self.x -=20
+                if self.x <= self.xrange[0]: self.x += 20
+
+
+
     def input(self,player,level):
-        self.patrol()
         if self.sees(player,level):
+            self.moving = False
             if self.aimed():
                 self.fire(player)
+        else: self.patrol()
 
     def aimed(self):
+        self.aiming = True
         if self.aim_timer/60 < 3:
             self.aim_timer += 1
         else:
-            aim_timer = 0
+            self.aim_timer = 0
             return True
 
     def sees(self, player, level):
         if player.hiding:
             return False
         else:
-            self.aim = True
+            self.aiming = True
             for block in level:
                 obscured = block.rect.clipline(self.rect.center, player.hitbox.center)
-                if obscured: self.aim = False
+                if obscured: self.aiming = False
 
             line_to_player = self.rect.clipline(self.rect.center, player.hitbox.center)
             if self.flip:
@@ -141,5 +155,5 @@ class Enemy(pygame.sprite.Sprite):
                 if line_to_player[1][0] > line_to_player[0][0]: facing = True
                 else: facing = False
 
-            if facing and self.aim: return True
+            if facing and self.aiming: return True
             else:                   return False

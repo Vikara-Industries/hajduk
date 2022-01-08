@@ -48,7 +48,7 @@ def main():
 
 
 
-    random_spawn_timer = random.randint(3000,4000)
+    random_spawn_timer = random.randint(1000,2000)
 
     enemy_spawner = pygame.USEREVENT +2
 
@@ -88,7 +88,7 @@ def main():
             if event.type == enemy_spawner:
                 #spawn_counter +=1
                 #print(spawn_counter)
-                spawn = random.choice([(150,145),(150,345),(710,135),(710,345)])
+                spawn = random.choice([(50,145),(50,345),(800,135),(800,345)])
                 enemy = Enemy(spawn[0],spawn[1])#spawn_counter)
                 ENEMIES.append(enemy)
                 enemy_group.add(enemy)

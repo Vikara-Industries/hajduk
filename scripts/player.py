@@ -37,6 +37,26 @@ class Player(pygame.sprite.Sprite):
         self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 4.png").convert_alpha())
         self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 5.png").convert_alpha())
 
+
+        self.death_timer = 0
+        self.died = False
+        self.death_anim = []
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 1.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 2.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 3.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 4.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 5.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 6.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 7.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 8.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 9.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 10.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 11.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 12.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 13.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 14.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 15.png").convert_alpha())
+
         self.frame_index = 0
 
         self.image = self.animation_list[self.frame_index]
@@ -69,48 +89,52 @@ class Player(pygame.sprite.Sprite):
 
 
     def update(self):
-        if self.moving and not self.sneaking:
-            self.weapon.spread = self.weapon.spread_max
+        if self.hp > 0:
+            if self.moving and not self.sneaking:
+                self.weapon.spread = self.weapon.spread_max
 
 
-        if self.reloading:
-            self.reload()
-        if self.shooting:
-            if self.shooting_freeze == 0:
-                self.ammo -=1
-                for block in self.level:
-                    shootline = block.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
-                    if shootline: self.shot = shootline[0]
+            if self.reloading:
+                self.reload()
+            if self.shooting:
+                if self.shooting_freeze == 0:
+                    self.ammo -=1
+                    for block in self.level:
+                        shootline = block.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
+                        if shootline: self.shot = shootline[0]
 
-                for enemy in self.enemies:
-                    shootline = enemy.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
-                    if shootline: enemy.kill()
+                    for enemy in self.enemies:
+                        shootline = enemy.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
+                        if shootline: enemy.kill()
 
-            self.shooting_freeze += self.anim_speed
-            if self.shooting_freeze > len(self.shooting_anim):
-                self.shooting = False
-                self.shooting_freeze = 0
-        else:
-            self.input()
+                self.shooting_freeze += self.anim_speed
+                if self.shooting_freeze > len(self.shooting_anim):
+                    self.shooting = False
+                    self.shooting_freeze = 0
+            else:
+                self.input()
 
 
 
-        self.animate()
-        self.y += 5
-        self.checkCollision(self.level)
-        self.rect.center = (self.x, self.y)
+            self.animate()
+            self.y += 5
+            self.checkCollision(self.level)
+            self.rect.center = (self.x, self.y)
 
-        if self.flip:
-            self.rect.center = (self.x - 25, self.y)
-            self.hitbox.topleft = (self.rect.topleft[0] + 64, self.rect.topleft[1])
-        else:
-            self.rect.center = (self.x+5, self.y)
-            self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
+            if self.flip:
+                self.rect.center = (self.x - 25, self.y)
+                self.hitbox.topleft = (self.rect.topleft[0] + 64, self.rect.topleft[1])
+            else:
+                self.rect.center = (self.x+5, self.y)
+                self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
+        else: self.died = True
+            
 
 
     def animate(self):
-
-        if self.shooting:
+        if self.died == True:
+            self.animation_list = self.death_anim
+        elif self.shooting:
             self.animation_list = self.shooting_anim
             self.hiding = False
         elif self.moving:
@@ -139,7 +163,9 @@ class Player(pygame.sprite.Sprite):
         hptxt = myfont.render(f"Health:{self.hp}",1,(100,250,60))
         screen.blit(hptxt, (600, 20))
         screen.blit(ammotxt, (40, 20))
-
+        if self.died:
+            
+            screen.blit(myfont.render("GAME OVER",1,(100,250,60)), (350,220))
         if self.reloading:
             screen.blit(myfont.render("Reloading",1,(100,250,60)), (self.hitbox.midtop[0] -75, self.hitbox.midtop[1] - 30))
 
