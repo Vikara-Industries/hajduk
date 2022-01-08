@@ -38,6 +38,8 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animation_list[self.frame_index]
         self.image = pygame.transform.scale2x(self.image)
         self.rect = self.image.get_rect()
+        self.hitbox = pygame.rect.Rect(self.rect.left + 12,self.rect.top, 26 ,self.rect.height)
+        print(self.hitbox)
 
 
         self.x = x
@@ -83,6 +85,12 @@ class Player(pygame.sprite.Sprite):
         self.checkCollision(self.level)
         self.rect.center = (self.x, self.y)
 
+        if self.flip:
+            self.hitbox.topleft = (self.rect.topleft[0] + 64, self.rect.topleft[1])
+        else:
+            self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
+        print(self.hitbox)
+
     def animate(self):
 
         if self.shooting:
@@ -106,6 +114,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animation_list[int(self.frame_index)]
         self.image = pygame.transform.scale2x(self.image)
         self.image = pygame.transform.flip(self.image, self.flip, False)
+        
 
 
     def draw_ui(self,screen):
@@ -150,7 +159,6 @@ class Player(pygame.sprite.Sprite):
             self.flip = True
 
         elif keys[pygame.K_w]:
-            print(pygame.time.get_ticks() - self.interact_timer)
             if self.interact_with and (pygame.time.get_ticks() - self.interact_timer > self.interact_cooldown):
                 self.interact_with.interact(self)
                 self.interact_timer = pygame.time.get_ticks()
@@ -188,6 +196,6 @@ class Player(pygame.sprite.Sprite):
 
 
     def checkCollision(self, level):
-        if pygame.sprite.spritecollideany(self, level) != None:
+        if self.hitbox.collidelist(level) != -1:
 
             self.y -= 5

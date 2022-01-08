@@ -33,9 +33,9 @@ class Portal(pygame.sprite.Sprite):
 
     def interact(self, player):
         if player.y > 150:
-            player.y -= 220
+            player.y -= 210
         else:
-            player.y += 220
+            player.y += 210
 
 
 class Ammo_box(pygame.sprite.Sprite):

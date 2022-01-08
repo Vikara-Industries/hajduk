@@ -86,7 +86,7 @@ class Enemy(pygame.sprite.Sprite):
             self.spawn_counter -= 1
         #self.rect = self.image.get_rect(center = (Enemy_position[0],Enemy_position[1]))
 
-            print(Enemy_position[0], Enemy_position[1])
+            #print(Enemy_position[0], Enemy_position[1])
 
 
     def animation(self):
@@ -154,7 +154,7 @@ class Enemy(pygame.sprite.Sprite):
         self.animation()
     #    self.sees_player()
         self.spawn()
-        print(self.spawn_counter)
+        #print(self.spawn_counter)
 
 
         pass

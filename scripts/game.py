@@ -10,9 +10,9 @@ from interactable import *
 
 
 block = "../sprites/ground.png"
-floor = "../sprites/floor.png"
-lplat = "../sprites/left platform.png"
-rplat = "../sprites/right platform.png"
+floor = "../sprites/invis.png"
+lplat = "../sprites/invis.png"
+rplat = "../sprites/invis.png"
 
 
 
@@ -20,7 +20,7 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self,img,x,y,sx,sy):
         super(Tile,self).__init__()
         self.image = pygame.image.load(img)
-        self.image = pygame.transform.smoothscale(self.image, (sx,sy))
+        self.image = pygame.transform.scale(self.image, (sx,sy))
         self.rect = self.image.get_rect()
         self.rect.bottomleft = (x,y)
 
@@ -31,8 +31,8 @@ def main():
     SCREENW = 800
     SCREENH = SCREENW* 0.6
 
-    GROUND = [Tile(floor,0,480,SCREENW,105), Tile(lplat,0,210,250,46),Tile(rplat,550,210,250,46)]
-    COLIDABLES = [Hide(140,380),Portal(0,380),Portal(0,164),Hide(560,380),Portal(700,380),Portal(700,164)]
+    GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,250,46),Tile(rplat,550,230,250,46)]
+    COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
 
 
     pygame.init()
@@ -49,8 +49,8 @@ def main():
 
 
 
-    bg = pygame.image.load("../sprites/background.png").convert()
-    bg = pygame.transform.smoothscale(bg,(SCREENW,SCREENH))
+    bg = pygame.image.load("../sprites/bg/full Level.png").convert()
+    bg = pygame.transform.scale(bg,(SCREENW,SCREENH))
 
     level_group = pygame.sprite.Group()
     interact_group = pygame.sprite.Group()
@@ -103,7 +103,7 @@ def main():
 
         #print(enemy_group)
         enemy_group.update()
-        enemy_group.draw(screen)
+        #enemy_group.draw(screen)
 
 
 
