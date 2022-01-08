@@ -2,9 +2,10 @@ from os import path
 import pygame
 from pygame import mouse
 class Player(pygame.sprite.Sprite):
-    def __init__(self, level, x, y, weapon):
+    def __init__(self, level,enemies, x, y, weapon):
         super(Player,self).__init__()
         self.level = level
+        self.enemies = enemies
         #animation
         self.anim_speed = 0.2
         self.flip = False
@@ -72,6 +73,11 @@ class Player(pygame.sprite.Sprite):
                 for block in self.level:
                     shootline = block.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
                     if shootline: self.shot = shootline[0]
+
+                for enemy in self.enemies:
+                    shootline = enemy.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
+                    if shootline: enemy.kill()
+
             self.shooting_freeze += self.anim_speed
             if self.shooting_freeze > len(self.shooting_anim):
                 self.shooting = False

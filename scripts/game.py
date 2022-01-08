@@ -33,7 +33,7 @@ def main():
 
     GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,270,46)]
     COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
-
+    ENEMIES = []
 
     pygame.init()
     clock = pygame.time.Clock()
@@ -62,7 +62,7 @@ def main():
 
 
     player_group = pygame.sprite.GroupSingle()
-    player = Player(GROUND,20,50,Gun())
+    player = Player(GROUND,ENEMIES,20,50,Gun())
     player_group.add(player)
 
 
@@ -80,7 +80,9 @@ def main():
             if event.type == enemy_spawner:
                 spawn_counter +=1
                 #print(spawn_counter)
-                enemy_group.add(Enemy(spawn_counter))
+                enemy = Enemy(spawn_counter)
+                ENEMIES.append(enemy)
+                enemy_group.add(enemy)
                 spawn_counter -= 1
 
 
@@ -105,7 +107,7 @@ def main():
 
         #print(enemy_group)
         enemy_group.update()
-        #enemy_group.draw(screen)
+        enemy_group.draw(screen)
 
 
 

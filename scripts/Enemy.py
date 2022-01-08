@@ -72,7 +72,7 @@ class Enemy(pygame.sprite.Sprite):
     def spawn(self):
         position_enemy = []
         POS_X = ('0', '0', ' 700', '700')
-        POS_Y = ('380', '164', '380', '164')
+        POS_Y = ('390', '185', '390', '185')
 
         for i in POS_X:
                 for a in POS_Y:
