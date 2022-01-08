@@ -29,18 +29,23 @@ class Tile(pygame.sprite.Sprite):
 
 
 def main():
+    pygame.init()
+    
+
     SCREENW = 800
     SCREENH = SCREENW* 0.6
-
-    GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,270,46)]
-    COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
-    ENEMIES = []
-
-    pygame.init()
 
     myfont = pygame.font.SysFont("monospace", 30)
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREENW,SCREENH))
+
+    GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,270,46)]
+    COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
+    COLIDABLES.append(Ammo_box(250,385))
+    COLIDABLES.append(Hp_box(350,385))
+    ENEMIES = []
+
+    
 
 
     random_spawn_timer = random.randint(3000,4000)
@@ -92,7 +97,9 @@ def main():
 
         screen.blit(bg,(0,0))
         level_group.draw(screen)
+        interact_group.update()
         interact_group.draw(screen)
+
         player_group.update()
         player.draw_ui(screen,myfont)
         player_group.draw(screen)
@@ -101,8 +108,10 @@ def main():
 
         #print(len(position_enemy))
         player.interact_with = None
-        for colidable in COLIDABLES:
+        for colidable in interact_group:
             if colidable.rect.collidepoint(player.hitbox.center):
+                if colidable == Ammo_box:
+                    colidable.interact(player)
                 player.interact_with = colidable
 
         if player.interact_with:
@@ -111,10 +120,6 @@ def main():
         #print(enemy_group)
         enemy_group.update()
         enemy_group.draw(screen)
-
-
-
-
 
         pygame.display.update()
 

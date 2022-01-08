@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.anim_speed = 0.2
         self.flip = False
         self.animation_list = [pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha()]
-
+        
         self.idle = [pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha(),pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha()]
 
         self.aiming = False
