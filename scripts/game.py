@@ -31,7 +31,7 @@ def main():
     SCREENW = 800
     SCREENH = SCREENW* 0.6
 
-    GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,520,230,270,46)]
+    GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,270,46)]
     COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
 
 
@@ -95,8 +95,10 @@ def main():
 
 
         #print(len(position_enemy))
-
-        player.interact_with = pygame.sprite.spritecollideany(player, interact_group)
+        player.interact_with = None
+        for colidable in COLIDABLES:
+            if colidable.rect.collidepoint(player.hitbox.center):
+                player.interact_with = colidable
 
         if player.interact_with:
             player.interact_with.draw_prompt(screen)
