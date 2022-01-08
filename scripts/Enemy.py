@@ -7,9 +7,10 @@ import math
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self,spawn_counter):
+    def __init__(self,x,y):
         super(Enemy,self).__init__()
 
+        self.xrange = (0,800)
 #######Animation###################################
         #Walk
         self.walking = False
@@ -26,11 +27,15 @@ class Enemy(pygame.sprite.Sprite):
                             enemy_walk4,
                             enemy_walk5,
                             enemy_walk6]
+
         #aim##
         self.aim = False
-        self.enemy_aim = pygame.image.load('../sprites/Turk/Aim.png').convert_alpha()
+        self.enemy_aim = [pygame.image.load('../sprites/Turk/Aim.png').convert_alpha(), pygame.image.load('../sprites/Turk/Aim.png').convert_alpha()]
+        self.aim_timer = 0
+        self.aim_thresh = 3
 
         #Shoot##
+        self.shooting_freeze = 0
         self.shooting = False
         enemy_shoot1 = pygame.image.load('../sprites/Turk/Shoot 1.png').convert_alpha()
         enemy_shoot2 = pygame.image.load('../sprites/Turk/Shoot 2.png').convert_alpha()
@@ -53,6 +58,8 @@ class Enemy(pygame.sprite.Sprite):
 
 
         self.rect = self.image.get_rect()
+        self.rect.bottomleft = (x,y)
+
         self.speed = 3
         self.bilosta = []
         #self.weapon = weapons
@@ -60,7 +67,7 @@ class Enemy(pygame.sprite.Sprite):
         #dettecting collision kurac#OVO IZNAD NE ZANM DA LI RADI
         #self.sight_range = pygame.Rect((self.rect.midleft),(200,400))
 
-        self.spawn_counter = spawn_counter
+        #self.spawn_counter = spawn_counter
         self.FOV = math.pi
 
 
@@ -69,7 +76,7 @@ class Enemy(pygame.sprite.Sprite):
 
 
 
-    def spawn(self):
+    """ def spawn(self):
         position_enemy = []
         POS_X = ('0', '0', ' 700', '700')
         POS_Y = ('390', '185', '390', '185')
@@ -84,6 +91,11 @@ class Enemy(pygame.sprite.Sprite):
             Enemy_position = random.choice(position_enemy)
             self.rect = self.image.get_rect(midbottom = (int(Enemy_position[0]),int(Enemy_position[1])))
             self.spawn_counter -= 1
+            if self.rect.y < 200:
+                if self.rect.x < 400:
+                    self.xrange = (0,240)
+                else:
+                    self.xrange = (500,800) """
         #self.rect = self.image.get_rect(center = (Enemy_position[0],Enemy_position[1]))
 
             #print(Enemy_position[0], Enemy_position[1])
@@ -92,16 +104,23 @@ class Enemy(pygame.sprite.Sprite):
     def animation(self):
         self.animation_index += self.anim_speed
         #self.image = self.enemy_stand
-        if self.walking:
+
+        if self.shooting:
+            self.walking = False
+            if self.animation_index >= len(self.enemy_shoot):
+                self.animation_index = 0
+            self.image = self.enemy_shoot[int(self.animation_index)]
+        
+        elif self.aim:
+            if self.animation_index >= len(self.enemy_aim):
+                self.animation_index = 0
+            self.image = self.enemy_aim[int(self.animation_index)]
+
+        elif self.walking:
             if self.animation_index >= len(self.enemy_walk):
                 self.animation_index =0
             self.image = self.enemy_walk[int(self.animation_index)]
-
-        elif self.shooting:
-            self.walking = False
-            if self.animation_index >= len(self.enemy_shoot):
-                self.animation = 0
-            self.image = self.enemy_shoot[int(self.animation_index)]
+            
 
         self.image = pygame.transform.scale2x(self.image)
         self.image = pygame.transform.flip(self.image, self.flip, False)
@@ -113,48 +132,77 @@ class Enemy(pygame.sprite.Sprite):
                 bilosta.append(walk)
                 if bilosta[0] == 1:
                     self.flip = False
-
-                    if self.rect.x+25 > 800:
-                        self.rect.x -= 0
+                    
+                    if self.rect.x in range(self.xrange[0],self.xrange[1]):
+                        self.rect.x -=2
                     else:
-                        self.rect.x += 2
+                        self.rect.x = self.xrange[1]
+                    
+
                     self.walking = True
+
                     if len(bilosta)/60 > 2:
                         bilosta.clear()
+
                 elif bilosta[0] == 0:
-
-                    if self.rect.x+10 < 0:
-                        self.rect.x += 0
-                    else:
-                        self.rect.x -= 2
                     self.flip = True
+                    if self.rect.x in range(self.xrange[0],self.xrange[1]):
+                        self.rect.x -=2
+                    else:
+                        self.rect.x = self.xrange[0]
+                    
                     self.walking = True
                     if len(bilosta)/60 > 2:
                         bilosta.clear()
 
 
-    def checkCollision(self, level):
-        if pygame.sprite.spritecollideany(self, level) != None:
+    def sees(self, player, level):
+        if player.hiding:
+            return False
+        else:
+            self.aim = True
+            for block in level:
+                obscured = block.rect.clipline(self.rect.center, player.hitbox.center)
+                if obscured: self.aim = False
 
-            self.y -= 5
+            line_to_player = self.rect.clipline(self.rect.center, player.hitbox.center)
+            if self.flip:
+                if line_to_player[1][0] < line_to_player[0][0]: facing = True
+                else: facing = False
+            else:
+                if line_to_player[1][0] > line_to_player[0][0]: facing = True
+                else: facing = False
 
-    def sees_player(self):
-        self.sight_range
-        #self.sight_range.blit(screen)
+            if facing and self.aim: return True
+            else:                   return False
+        
+                        
+                        
 
 
 
 
-
-
-    def update(self):
-        Time = pygame.time.get_ticks()
-        start_time = 0
+    def update(self, player, level):
+        #self.spawn()
         self.Enemy_movment(self.bilosta)
         self.animation()
-    #    self.sees_player()
-        self.spawn()
-        #print(self.spawn_counter)
+        
+        if self.sees(player,level):
+            if self.aim_timer < self.aim_thresh:
+                self.aim = True
+                self.aim_timer += 0.2
+            else:  
+                self.shooting = True
+                hit = random.randrange(0,9)
+                if hit > 5:
+                    player.hp -= 1
+                self.aim_timer = 0
+                
+
+        else: self.aim_timer = 0
+                
 
 
-        pass
+        
+
+

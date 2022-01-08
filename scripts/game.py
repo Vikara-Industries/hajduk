@@ -39,7 +39,7 @@ def main():
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREENW,SCREENH))
 
-    GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,270,46)]
+    GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,275,46)]
     COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
     COLIDABLES.append(Ammo_box(250,385))
     COLIDABLES.append(Hp_box(350,385))
@@ -77,7 +77,7 @@ def main():
 
 
 
-    spawn_counter = 0
+    #spawn_counter = 0
     while True:
         clock.tick(60)
 
@@ -86,12 +86,14 @@ def main():
             if event.type == pygame.QUIT: sys.exit()
 
             if event.type == enemy_spawner:
-                spawn_counter +=1
+                #spawn_counter +=1
                 #print(spawn_counter)
-                enemy = Enemy(spawn_counter)
+                spawn = random.choice([(10,185),(10,390),(700,185),(700,390)])
+                print(spawn)
+                enemy = Enemy(spawn[0],spawn[1])#spawn_counter)
                 ENEMIES.append(enemy)
                 enemy_group.add(enemy)
-                spawn_counter -= 1
+                #spawn_counter -= 1
 
 
 
@@ -118,7 +120,7 @@ def main():
             player.interact_with.draw_prompt(screen)
 
         #print(enemy_group)
-        enemy_group.update()
+        enemy_group.update(player,GROUND)
         enemy_group.draw(screen)
 
         pygame.display.update()
