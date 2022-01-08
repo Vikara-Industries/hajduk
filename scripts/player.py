@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.anim_speed = 0.2
         self.flip = False
         self.animation_list = [pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha()]
-        
+
         self.idle = [pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha(),pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha()]
 
         self.aiming = False
@@ -106,7 +106,7 @@ class Player(pygame.sprite.Sprite):
         else:
             self.rect.center = (self.x+5, self.y)
             self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
-            
+
 
     def animate(self):
 
@@ -131,7 +131,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animation_list[int(self.frame_index)]
         self.image = pygame.transform.scale2x(self.image)
         self.image = pygame.transform.flip(self.image, self.flip, False)
-        
+
 
 
     def draw_ui(self,screen,myfont):

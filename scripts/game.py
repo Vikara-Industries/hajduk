@@ -4,7 +4,7 @@ from pygame.sprite import spritecollideany
 from pygame.transform import smoothscale
 from player import *
 from weapons import *
-from Enemy import *
+from NewEnemy import *
 #from Enemy import *
 from interactable import *
 
@@ -30,7 +30,7 @@ class Tile(pygame.sprite.Sprite):
 
 def main():
     pygame.init()
-    
+
 
     SCREENW = 800
     SCREENH = SCREENW* 0.6
@@ -45,7 +45,7 @@ def main():
     COLIDABLES.append(Hp_box(350,385))
     ENEMIES = []
 
-    
+
 
 
     random_spawn_timer = random.randint(3000,4000)
@@ -88,8 +88,7 @@ def main():
             if event.type == enemy_spawner:
                 #spawn_counter +=1
                 #print(spawn_counter)
-                spawn = random.choice([(10,185),(10,390),(700,185),(700,390)])
-                print(spawn)
+                spawn = random.choice([(150,145),(150,345),(710,135),(710,345)])
                 enemy = Enemy(spawn[0],spawn[1])#spawn_counter)
                 ENEMIES.append(enemy)
                 enemy_group.add(enemy)

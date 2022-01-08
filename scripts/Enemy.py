@@ -9,8 +9,8 @@ import math
 class Enemy(pygame.sprite.Sprite):
     def __init__(self,x,y):
         super(Enemy,self).__init__()
-
-        self.xrange = (0,800)
+        self.flip = False
+        self.xrange = (5,800)
 #######Animation###################################
         #Walk
         self.walking = False
@@ -45,7 +45,8 @@ class Enemy(pygame.sprite.Sprite):
         self.enemy_shoot = [enemy_shoot1,enemy_shoot2,enemy_shoot3,enemy_shoot4,enemy_shoot5]
 
         #Stand###
-        self.enemy_stand = pygame.image.load('../sprites/Turk/Stand.png')
+        self.stand = False
+        self.enemy_stand = [pygame.image.load('../sprites/Turk/Stand.png'),pygame.image.load('../sprites/Turk/Stand.png')]
 #############################################################################
         self.anim_speed = 0.2
 
@@ -54,7 +55,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.animation_list = pygame.image.load('../sprites/Turk/Stand.png')
         self.animation_index = 0
-        self.filp = False
+
 
 
         self.rect = self.image.get_rect()
@@ -69,7 +70,10 @@ class Enemy(pygame.sprite.Sprite):
 
         #self.spawn_counter = spawn_counter
         self.FOV = math.pi
-
+        if y < 200:
+            if x <300:
+                self.xrange = (0,270)
+            else: self.xrange = (530,800)
 
 
 
@@ -106,22 +110,24 @@ class Enemy(pygame.sprite.Sprite):
         #self.image = self.enemy_stand
 
         if self.shooting:
-            self.walking = False
             if self.animation_index >= len(self.enemy_shoot):
                 self.animation_index = 0
             self.image = self.enemy_shoot[int(self.animation_index)]
-        
+
         elif self.aim:
             if self.animation_index >= len(self.enemy_aim):
                 self.animation_index = 0
             self.image = self.enemy_aim[int(self.animation_index)]
-
+        elif self.stand:
+            if self.animation_index >= len(self.enemy_stand):
+                self.animation_index =0
+                self.image = self.enemy_walk[int(self.animation_index)]
         elif self.walking:
             if self.animation_index >= len(self.enemy_walk):
                 self.animation_index =0
             self.image = self.enemy_walk[int(self.animation_index)]
-            
 
+        print(self.image)
         self.image = pygame.transform.scale2x(self.image)
         self.image = pygame.transform.flip(self.image, self.flip, False)
 
@@ -132,17 +138,13 @@ class Enemy(pygame.sprite.Sprite):
                 bilosta.append(walk)
                 if bilosta[0] == 1:
                     self.flip = False
-                    
-                    if self.rect.x in range(self.xrange[0],self.xrange[1]):
-                        self.rect.x -=2
+
+                    if self.rect.left in range(self.xrange[0],self.xrange[1]):
+                        self.walking = True
+                        self.rect.x +=2
                     else:
+                        self.stand = True
                         self.rect.x = self.xrange[1]
-                    
-
-                    self.walking = True
-
-                    if len(bilosta)/60 > 2:
-                        bilosta.clear()
 
                 elif bilosta[0] == 0:
                     self.flip = True
@@ -150,10 +152,10 @@ class Enemy(pygame.sprite.Sprite):
                         self.rect.x -=2
                     else:
                         self.rect.x = self.xrange[0]
-                    
+
                     self.walking = True
-                    if len(bilosta)/60 > 2:
-                        bilosta.clear()
+                if len(bilosta)/60 > 2:
+                    bilosta.clear()
 
 
     def sees(self, player, level):
@@ -175,34 +177,31 @@ class Enemy(pygame.sprite.Sprite):
 
             if facing and self.aim: return True
             else:                   return False
-        
-                        
-                        
+
+
+
 
 
 
 
     def update(self, player, level):
         #self.spawn()
-        self.Enemy_movment(self.bilosta)
         self.animation()
-        
+        self.Enemy_movment(self.bilosta)
+
+
         if self.sees(player,level):
             if self.aim_timer < self.aim_thresh:
                 self.aim = True
                 self.aim_timer += 0.2
-            else:  
+            else:
                 self.shooting = True
                 hit = random.randrange(0,9)
                 if hit > 5:
                     player.hp -= 1
                 self.aim_timer = 0
-                
+
+                self.wait_for_shoot_anim()
+
 
         else: self.aim_timer = 0
-                
-
-
-        
-
-
