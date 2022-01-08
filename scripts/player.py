@@ -86,10 +86,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = (self.x, self.y)
 
         if self.flip:
+            self.rect.center = (self.x - 25, self.y)
             self.hitbox.topleft = (self.rect.topleft[0] + 64, self.rect.topleft[1])
         else:
+            self.rect.center = (self.x+5, self.y)
             self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
-        print(self.hitbox)
+            
 
     def animate(self):
 
