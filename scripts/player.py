@@ -1,6 +1,9 @@
 from os import path
 import pygame
 from pygame import mouse
+
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, level,enemies, x, y, weapon):
         super(Player,self).__init__()
@@ -58,6 +61,7 @@ class Player(pygame.sprite.Sprite):
         self.reloading = False
         self.reload_timer = 0
 
+        self.hp = 3
         self.interact_with = None
         self.interact_timer = pygame.time.get_ticks()
         self.interact_cooldown = 800
@@ -65,11 +69,15 @@ class Player(pygame.sprite.Sprite):
 
 
     def update(self):
+        if self.moving and not self.sneaking:
+            self.weapon.spread = self.weapon.spread_max
+
 
         if self.reloading:
             self.reload()
         if self.shooting:
             if self.shooting_freeze == 0:
+                self.ammo -=1
                 for block in self.level:
                     shootline = block.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
                     if shootline: self.shot = shootline[0]
@@ -82,9 +90,10 @@ class Player(pygame.sprite.Sprite):
             if self.shooting_freeze > len(self.shooting_anim):
                 self.shooting = False
                 self.shooting_freeze = 0
-
         else:
             self.input()
+
+
 
         self.animate()
         self.y += 5
@@ -125,13 +134,18 @@ class Player(pygame.sprite.Sprite):
         
 
 
-    def draw_ui(self,screen):
-        if self.moving and not self.sneaking:
-            self.weapon.spread = self.weapon.spread_max
+    def draw_ui(self,screen,myfont):
+        ammotxt = myfont.render(f"Ammo:{self.ammo}",1,(100,250,60))
+        hptxt = myfont.render(f"Health:{self.hp}",1,(100,250,60))
+        screen.blit(hptxt, (600, 20))
+        screen.blit(ammotxt, (40, 20))
+
+        if self.reloading:
+            screen.blit(myfont.render("Reloading",1,(100,250,60)), (self.hitbox.midtop[0] -75, self.hitbox.midtop[1] - 30))
 
         if self.aiming:
-            pygame.draw.line(screen,(255,0,0),self.rect.center, (mouse.get_pos()[0] ,mouse.get_pos()[1] + self.weapon.spread/5))
-            pygame.draw.line(screen,(255,0,0),self.rect.center, (mouse.get_pos()[0] ,mouse.get_pos()[1] - self.weapon.spread/5))
+            pygame.draw.line(screen,(255,0,0),self.hitbox.center, (mouse.get_pos()[0] ,mouse.get_pos()[1] + self.weapon.spread/5))
+            pygame.draw.line(screen,(255,0,0),self.hitbox.center, (mouse.get_pos()[0] ,mouse.get_pos()[1] - self.weapon.spread/5))
 
         if self.shot:
             pygame.draw.circle(screen, (255,100,200), self.shot,3,2)
@@ -193,7 +207,6 @@ class Player(pygame.sprite.Sprite):
                 self.reload_timer += 1
             else:
                 self.weapon.reload()
-                self.ammo -=1
                 print(self.ammo)
                 self.reload_timer = 0
                 self.reloading = False

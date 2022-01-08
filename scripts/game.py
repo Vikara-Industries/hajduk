@@ -9,6 +9,7 @@ from Enemy import *
 from interactable import *
 
 
+
 block = "../sprites/ground.png"
 floor = "../sprites/invis.png"
 lplat = "../sprites/invis.png"
@@ -36,6 +37,8 @@ def main():
     ENEMIES = []
 
     pygame.init()
+
+    myfont = pygame.font.SysFont("monospace", 30)
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREENW,SCREENH))
 
@@ -91,7 +94,7 @@ def main():
         level_group.draw(screen)
         interact_group.draw(screen)
         player_group.update()
-        player.draw_ui(screen)
+        player.draw_ui(screen,myfont)
         player_group.draw(screen)
 
 
