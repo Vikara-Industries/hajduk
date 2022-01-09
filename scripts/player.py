@@ -67,7 +67,6 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale2x(self.image)
         self.rect = self.image.get_rect()
         self.hitbox = pygame.rect.Rect(self.rect.left + 12,self.rect.top, 26 ,self.rect.height)
-        print(self.hitbox)
 
 
         self.x = x
@@ -245,11 +244,9 @@ class Player(pygame.sprite.Sprite):
                 self.reload_timer += 1
             else:
                 self.weapon.reload()
-                print(self.ammo)
                 self.reload_timer = 0
                 self.reloading = False
         else:
-            print("no ammo")
             self.reloading = False
 
 

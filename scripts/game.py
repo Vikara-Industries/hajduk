@@ -48,14 +48,14 @@ def main():
 
 
 
-    random_spawn_timer = random.randint(4000,11000)
-
+    random_spawn_timer = random.randint(2000,6000)
+    random_pickup_timer = random.randint(10000,15000)
     enemy_spawner = pygame.USEREVENT +2
 
     pickup_spawner = pygame.USEREVENT +3
 
     pygame.time.set_timer(enemy_spawner,random_spawn_timer)
-    pygame.time.set_timer(pickup_spawner,random_spawn_timer)
+    pygame.time.set_timer(pickup_spawner,random_pickup_timer)
     enemy_group = pygame.sprite.Group()
 
 
@@ -91,17 +91,18 @@ def main():
             if event.type == enemy_spawner:
                 #spawn_counter +=1
                 #print(spawn_counter)
-                spawn = random.choice([(50,145),(50,345),(800,135),(800,345)])
+                spawn = random.choice([(50,145),(50,345),(750,135),(750,345)])
                 enemy = Enemy(spawn[0],spawn[1])#spawn_counter)
                 ENEMIES.append(enemy)
                 enemy_group.add(enemy)
                 #spawn_counter -= 1
 
             if event.type == pickup_spawner:
-                spawn = random.choice([(250,145),(250,345),(650,135),(400,345)])
+                spawn = random.choice([(190,185),(500,180),(350,400)])
                 if random.random() > 0.4:
                     pickup = Ammo_box(spawn[0],spawn[1])
                 else: pickup = Hp_box(spawn[0],spawn[1])
+                interact_group.add(pickup)
 
 
         screen.blit(bg,(0,0))
@@ -123,7 +124,7 @@ def main():
                     colidable.interact(player)
                 player.interact_with = colidable
 
-        if player.interact_with:
+        if player.interact_with and not player.hiding:
             player.interact_with.draw_prompt(screen)
 
         #print(enemy_group)

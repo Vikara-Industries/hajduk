@@ -5,13 +5,15 @@ class Enemy(pygame.sprite.Sprite):
         super(Enemy,self).__init__()
         #animation
         if y > 300:
-            self.xrange =(40,810)
+            self.xrange =(30,780)
         elif x< 100:
-            self.xrange =(40,280)
+            self.xrange =(30,280)
         else:
-            self.xrange =(570,810)
+            self.xrange =(520,780)
+
+        if x < 300:  self.flip = False
+        else:        self.flip = True
         self.anim_speed = 0.2
-        self.flip = False
         self.animation_list = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
 
         self.idle = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha(),pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
@@ -131,7 +133,7 @@ class Enemy(pygame.sprite.Sprite):
                      self.stand_timer += 1
             else:
                 self.stand_timer = 0
-                self.flip = True
+                self.flip = not self.flip
                 if self.x >= self.xrange[1]: self.x -=20
                 if self.x <= self.xrange[0]: self.x += 20
 
