@@ -37,6 +37,17 @@ class Enemy(pygame.sprite.Sprite):
         self.shooting_anim.append(pygame.image.load("../sprites/turk/shoot 4.png").convert_alpha())
         self.shooting_anim.append(pygame.image.load("../sprites/turk/shoot 5.png").convert_alpha())
 
+        self.died = False
+        self.death_timer = 0
+        self.death_anim = []
+        self.death_anim.append(pygame.image.load("../sprites/turk/death 1.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/turk/death 2.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/turk/death 3.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/turk/death 4.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/turk/death 5.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("../sprites/turk/death 6.png").convert_alpha())
+
+
         self.frame_index = 0
 
         self.image = self.animation_list[self.frame_index]
@@ -53,30 +64,29 @@ class Enemy(pygame.sprite.Sprite):
 
 
     def update(self,player,level):
+        if not self.died:
+            if self.shooting:
+                self.shooting_freeze += self.anim_speed
+                if self.shooting_freeze > len(self.shooting_anim):
+                    self.shooting = False
+                    self.shooting_freeze = 0
+            else: self.input(player, level)
 
-        if self.shooting:
-            self.shooting_freeze += self.anim_speed
-            if self.shooting_freeze > len(self.shooting_anim):
-                self.shooting = False
-                self.shooting_freeze = 0
-        else: self.input(player, level)
-
+            if self.flip:
+                self.rect.center = (self.x - 25, self.y)
+                self.hitbox.topleft = (self.rect.topleft[0] + 64, self.rect.topleft[1])
+            else:
+                self.rect.center = (self.x+5, self.y)
+                self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
+        else: self.die()
         self.animate()
         self.rect.center = (self.x, self.y)
 
-        if self.flip:
-            self.rect.center = (self.x - 25, self.y)
-            self.hitbox.topleft = (self.rect.topleft[0] + 64, self.rect.topleft[1])
-        else:
-            self.rect.center = (self.x+5, self.y)
-            self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
-
-
     def animate(self):
-
-        if self.shooting:
+        if self.died:
+            self.animation_list = self.death_anim
+        elif self.shooting:
             self.animation_list = self.shooting_anim
-            
             
         elif self.moving:
             
@@ -96,11 +106,15 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.scale2x(self.image)
         self.image = pygame.transform.flip(self.image, self.flip, False)
 
-
+    def die(self):
+        if self.death_timer/60 < 1.4:
+            self.death_timer += 1
+        else:
+            self.kill()
     def fire(self, player):
         self.shooting = True
         shot = random.randrange(0,9)
-        if shot > 6:
+        if shot > 3:
             player.hp -= 1
 
     def patrol(self):
@@ -113,7 +127,7 @@ class Enemy(pygame.sprite.Sprite):
                 self.x += 2
         else:
             self.moving = False
-            if self.stand_timer/100 < 2:
+            if self.stand_timer/60 < 3:
                      self.stand_timer += 1
             else:
                 self.stand_timer = 0
@@ -132,7 +146,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def aimed(self):
         self.aiming = True
-        if self.aim_timer/60 < 3:
+        if self.aim_timer/60 < 2:
             self.aim_timer += 1
         else:
             self.aim_timer = 0

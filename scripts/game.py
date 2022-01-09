@@ -48,11 +48,14 @@ def main():
 
 
 
-    random_spawn_timer = random.randint(1000,2000)
+    random_spawn_timer = random.randint(4000,11000)
 
     enemy_spawner = pygame.USEREVENT +2
 
+    pickup_spawner = pygame.USEREVENT +3
+
     pygame.time.set_timer(enemy_spawner,random_spawn_timer)
+    pygame.time.set_timer(pickup_spawner,random_spawn_timer)
     enemy_group = pygame.sprite.Group()
 
 
@@ -94,6 +97,11 @@ def main():
                 enemy_group.add(enemy)
                 #spawn_counter -= 1
 
+            if event.type == pickup_spawner:
+                spawn = random.choice([(250,145),(250,345),(650,135),(400,345)])
+                if random.random() > 0.4:
+                    pickup = Ammo_box(spawn[0],spawn[1])
+                else: pickup = Hp_box(spawn[0],spawn[1])
 
 
         screen.blit(bg,(0,0))

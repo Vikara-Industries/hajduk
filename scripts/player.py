@@ -57,6 +57,10 @@ class Player(pygame.sprite.Sprite):
         self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 14.png").convert_alpha())
         self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 15.png").convert_alpha())
 
+        self.hiding = False
+        self.hide_anim = [pygame.image.load("../sprites/hajduk/Crouch.png").convert_alpha(),pygame.image.load("../sprites/hajduk/Crouch.png").convert_alpha()]
+
+
         self.frame_index = 0
 
         self.image = self.animation_list[self.frame_index]
@@ -72,8 +76,7 @@ class Player(pygame.sprite.Sprite):
 
         self.sneaking = False
 
-        self.hiding = False
-
+        self.score = 0
         self.weapon = weapon
         self.shot = False
 
@@ -105,7 +108,10 @@ class Player(pygame.sprite.Sprite):
 
                     for enemy in self.enemies:
                         shootline = enemy.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
-                        if shootline: enemy.kill()
+                        if shootline: 
+                            enemy.died = True
+                            self.score += 100
+
 
                 self.shooting_freeze += self.anim_speed
                 if self.shooting_freeze > len(self.shooting_anim):
@@ -116,7 +122,7 @@ class Player(pygame.sprite.Sprite):
 
 
 
-            self.animate()
+            
             self.y += 5
             self.checkCollision(self.level)
             self.rect.center = (self.x, self.y)
@@ -128,12 +134,15 @@ class Player(pygame.sprite.Sprite):
                 self.rect.center = (self.x+5, self.y)
                 self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
         else: self.died = True
-            
+        self.animate()
 
 
     def animate(self):
         if self.died == True:
+            
             self.animation_list = self.death_anim
+            if self.frame_index > len(self.animation_list):
+                self.frame_index = len(self.animation_list)
         elif self.shooting:
             self.animation_list = self.shooting_anim
             self.hiding = False
@@ -146,6 +155,8 @@ class Player(pygame.sprite.Sprite):
             self.hiding = False
             self.animation_list = self.aim
             self.weapon.spread_min = 40
+        elif self.hiding:
+            self.animation_list = self.hide_anim
         else: self.animation_list = self.idle
 
         self.frame_index += self.anim_speed
@@ -165,7 +176,8 @@ class Player(pygame.sprite.Sprite):
         screen.blit(ammotxt, (40, 20))
         if self.died:
             
-            screen.blit(myfont.render("GAME OVER",1,(100,250,60)), (350,220))
+            screen.blit(myfont.render("GAME OVER",1,(100,250,60)), (350,100))
+            screen.blit(myfont.render(f"The Ottomans will kill {self.score} Serbs as revenge.",1,(100,250,60)), (20,220))
         if self.reloading:
             screen.blit(myfont.render("Reloading",1,(100,250,60)), (self.hitbox.midtop[0] -75, self.hitbox.midtop[1] - 30))
 
