@@ -12,53 +12,53 @@ class Player(pygame.sprite.Sprite):
         #animation
         self.anim_speed = 0.2
         self.flip = False
-        self.animation_list = [pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha()]
+        self.animation_list = [pygame.image.load("./sprites/hajduk/Stand.png").convert_alpha()]
 
-        self.idle = [pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha(),pygame.image.load("../sprites/hajduk/Stand.png").convert_alpha()]
+        self.idle = [pygame.image.load("./sprites/hajduk/Stand.png").convert_alpha(),pygame.image.load("./sprites/hajduk/Stand.png").convert_alpha()]
 
         self.aiming = False
-        self.aim = [pygame.image.load("../sprites/hajduk/aim.png").convert_alpha(),pygame.image.load("../sprites/hajduk/aim.png").convert_alpha()]
+        self.aim = [pygame.image.load("./sprites/hajduk/aim.png").convert_alpha(),pygame.image.load("./sprites/hajduk/aim.png").convert_alpha()]
 
         self.moving = False
         self.walking = []
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 1.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 2.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 3.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 4.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 5.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/hajduk/walk 6.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/hajduk/walk 1.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/hajduk/walk 2.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/hajduk/walk 3.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/hajduk/walk 4.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/hajduk/walk 5.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/hajduk/walk 6.png").convert_alpha())
 
         self.shooting = False
         self.shooting_freeze = 0
         self.shooting_anim = []
-        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 1.png").convert_alpha())
-        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 2.png").convert_alpha())
-        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 3.png").convert_alpha())
-        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 4.png").convert_alpha())
-        self.shooting_anim.append(pygame.image.load("../sprites/hajduk/shoot 5.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/hajduk/shoot 1.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/hajduk/shoot 2.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/hajduk/shoot 3.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/hajduk/shoot 4.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/hajduk/shoot 5.png").convert_alpha())
 
 
         self.death_timer = 0
         self.died = False
         self.death_anim = []
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 1.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 2.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 3.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 4.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 5.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 6.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 7.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 8.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 9.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 10.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 11.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 12.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 13.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 14.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/hajduk/Death 15.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 1.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 2.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 3.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 4.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 5.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 6.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 7.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 8.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 9.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 10.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 11.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 12.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 13.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 14.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/hajduk/Death 15.png").convert_alpha())
 
         self.hiding = False
-        self.hide_anim = [pygame.image.load("../sprites/hajduk/Crouch.png").convert_alpha(),pygame.image.load("../sprites/hajduk/Crouch.png").convert_alpha()]
+        self.hide_anim = [pygame.image.load("./sprites/hajduk/Crouch.png").convert_alpha(),pygame.image.load("./sprites/hajduk/Crouch.png").convert_alpha()]
 
 
         self.frame_index = 0

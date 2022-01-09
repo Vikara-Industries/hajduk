@@ -1,11 +1,11 @@
 import pygame
 
-prompt = pygame.image.load("../sprites/interactables/prompt.png")
+prompt = pygame.image.load("./sprites/interactables/prompt.png")
 
 class Hide(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Hide,self).__init__()
-        self.image = pygame.image.load("../sprites/interactables/Hide.png")
+        self.image = pygame.image.load("./sprites/interactables/Hide.png")
         self.rect = self.image.get_rect()
         self.rect.bottomleft = (x,y)
         self.prompt_pos = (self.rect.center[0]-20, self.rect.center[1] - 20)
@@ -21,7 +21,7 @@ class Hide(pygame.sprite.Sprite):
 class Portal(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Portal,self).__init__()
-        self.image = pygame.image.load("../sprites/interactables/portal.png")
+        self.image = pygame.image.load("./sprites/interactables/portal.png")
         self.rect = self.image.get_rect()
         self.rect.bottomleft = (x,y)
         self.prompt_pos = (self.rect.center[0]-20, self.rect.center[1] - 20)
@@ -41,12 +41,12 @@ class Portal(pygame.sprite.Sprite):
 class Ammo_box(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Ammo_box,self).__init__()
-        self.animation_list = [pygame.image.load("../sprites/interactables/ammo/position 1.png").convert_alpha()]
-        self.animation_list.append(pygame.image.load("../sprites/interactables/ammo/position 2.png").convert_alpha())
-        self.animation_list.append(pygame.image.load("../sprites/interactables/ammo/position 3.png").convert_alpha())
-        self.animation_list.append(pygame.image.load("../sprites/interactables/ammo/position 4.png").convert_alpha())
-        self.animation_list.append(pygame.image.load("../sprites/interactables/ammo/position 5.png").convert_alpha())
-        self.animation_list.append(pygame.image.load("../sprites/interactables/ammo/position 6.png").convert_alpha())
+        self.animation_list = [pygame.image.load("./sprites/interactables/ammo/position 1.png").convert_alpha()]
+        self.animation_list.append(pygame.image.load("./sprites/interactables/ammo/position 2.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("./sprites/interactables/ammo/position 3.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("./sprites/interactables/ammo/position 4.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("./sprites/interactables/ammo/position 5.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("./sprites/interactables/ammo/position 6.png").convert_alpha())
         
         self.anim_frame = 0
         self.image = self.animation_list[self.anim_frame]
@@ -74,12 +74,12 @@ class Ammo_box(pygame.sprite.Sprite):
 class Hp_box(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super(Hp_box,self).__init__()
-        self.animation_list = [pygame.image.load("../sprites/interactables/health/position 1.png").convert_alpha()]
-        self.animation_list.append(pygame.image.load("../sprites/interactables/health/position 2.png").convert_alpha())
-        self.animation_list.append(pygame.image.load("../sprites/interactables/health/position 3.png").convert_alpha())
-        self.animation_list.append(pygame.image.load("../sprites/interactables/health/position 4.png").convert_alpha())
-        self.animation_list.append(pygame.image.load("../sprites/interactables/health/position 5.png").convert_alpha())
-        self.animation_list.append(pygame.image.load("../sprites/interactables/health/position 6.png").convert_alpha())
+        self.animation_list = [pygame.image.load("./sprites/interactables/health/position 1.png").convert_alpha()]
+        self.animation_list.append(pygame.image.load("./sprites/interactables/health/position 2.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("./sprites/interactables/health/position 3.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("./sprites/interactables/health/position 4.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("./sprites/interactables/health/position 5.png").convert_alpha())
+        self.animation_list.append(pygame.image.load("./sprites/interactables/health/position 6.png").convert_alpha())
         
         self.anim_frame = 0
         self.image = self.animation_list[self.anim_frame]

@@ -1,7 +1,6 @@
 import pygame, sys
 from pygame.sprite import spritecollideany
 
-from pygame.transform import smoothscale
 from player import *
 from weapons import *
 from NewEnemy import *
@@ -10,10 +9,10 @@ from interactable import *
 
 
 
-block = "../sprites/ground.png"
-floor = "../sprites/invis.png"
-lplat = "../sprites/invis.png"
-rplat = "../sprites/invis.png"
+block = "./sprites/ground.png"
+floor = "./sprites/invis.png"
+lplat = "./sprites/invis.png"
+rplat = "./sprites/invis.png"
 
 
 
@@ -60,7 +59,7 @@ def main():
 
 
 
-    bg = pygame.image.load("../sprites/bg/full Level.png").convert()
+    bg = pygame.image.load("./sprites/bg/full Level.png").convert()
     bg = pygame.transform.scale(bg,(SCREENW,SCREENH))
 
     level_group = pygame.sprite.Group()

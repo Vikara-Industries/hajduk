@@ -14,40 +14,40 @@ class Enemy(pygame.sprite.Sprite):
         if x < 300:  self.flip = False
         else:        self.flip = True
         self.anim_speed = 0.2
-        self.animation_list = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
+        self.animation_list = [pygame.image.load("./sprites/turk/Stand.png").convert_alpha()]
 
-        self.idle = [pygame.image.load("../sprites/turk/Stand.png").convert_alpha(),pygame.image.load("../sprites/turk/Stand.png").convert_alpha()]
+        self.idle = [pygame.image.load("./sprites/turk/Stand.png").convert_alpha(),pygame.image.load("./sprites/turk/Stand.png").convert_alpha()]
         self.stand_timer = 0
         self.aiming = False
-        self.aim = [pygame.image.load("../sprites/turk/aim.png").convert_alpha(),pygame.image.load("../sprites/turk/aim.png").convert_alpha()]
+        self.aim = [pygame.image.load("./sprites/turk/aim.png").convert_alpha(),pygame.image.load("./sprites/turk/aim.png").convert_alpha()]
 
         self.moving = False
         self.walking = []
-        self.walking.append(pygame.image.load("../sprites/turk/walk 1.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 2.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 3.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 4.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 5.png").convert_alpha())
-        self.walking.append(pygame.image.load("../sprites/turk/walk 6.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/turk/walk 1.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/turk/walk 2.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/turk/walk 3.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/turk/walk 4.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/turk/walk 5.png").convert_alpha())
+        self.walking.append(pygame.image.load("./sprites/turk/walk 6.png").convert_alpha())
 
         self.shooting = False
         self.shooting_freeze = 0
         self.shooting_anim = []
-        self.shooting_anim.append(pygame.image.load("../sprites/turk/shoot 1.png").convert_alpha())
-        self.shooting_anim.append(pygame.image.load("../sprites/turk/shoot 2.png").convert_alpha())
-        self.shooting_anim.append(pygame.image.load("../sprites/turk/shoot 3.png").convert_alpha())
-        self.shooting_anim.append(pygame.image.load("../sprites/turk/shoot 4.png").convert_alpha())
-        self.shooting_anim.append(pygame.image.load("../sprites/turk/shoot 5.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/turk/shoot 1.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/turk/shoot 2.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/turk/shoot 3.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/turk/shoot 4.png").convert_alpha())
+        self.shooting_anim.append(pygame.image.load("./sprites/turk/shoot 5.png").convert_alpha())
 
         self.died = False
         self.death_timer = 0
         self.death_anim = []
-        self.death_anim.append(pygame.image.load("../sprites/turk/death 1.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/turk/death 2.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/turk/death 3.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/turk/death 4.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/turk/death 5.png").convert_alpha())
-        self.death_anim.append(pygame.image.load("../sprites/turk/death 6.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/turk/death 1.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/turk/death 2.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/turk/death 3.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/turk/death 4.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/turk/death 5.png").convert_alpha())
+        self.death_anim.append(pygame.image.load("./sprites/turk/death 6.png").convert_alpha())
 
 
         self.frame_index = 0
