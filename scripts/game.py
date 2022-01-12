@@ -1,5 +1,6 @@
 import pygame, sys
 from pygame.sprite import spritecollideany
+from pygame import mixer
 
 from player import *
 from weapons import *
@@ -26,11 +27,12 @@ class Tile(pygame.sprite.Sprite):
 
 
 
-
 def main():
     pygame.init()
-
-
+    pygame.mixer.init()
+    mixer.music.load("./Sound/The Underscore Orkestra - Balkan Nights.mp3")
+    mixer.music.play(-1)
+    mixer.music.set_volume(0.4)
     SCREENW = 800
     SCREENH = SCREENW* 0.6
 
@@ -40,8 +42,6 @@ def main():
 
     GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,275,46)]
     COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
-    COLIDABLES.append(Ammo_box(250,385))
-    COLIDABLES.append(Hp_box(350,385))
     ENEMIES = []
 
 
@@ -131,5 +131,3 @@ def main():
         enemy_group.draw(screen)
 
         pygame.display.update()
-
-main()

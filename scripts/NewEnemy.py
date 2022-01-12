@@ -1,4 +1,5 @@
 import pygame, random
+from pygame import mixer
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -30,6 +31,7 @@ class Enemy(pygame.sprite.Sprite):
         self.walking.append(pygame.image.load("./sprites/turk/walk 5.png").convert_alpha())
         self.walking.append(pygame.image.load("./sprites/turk/walk 6.png").convert_alpha())
 
+        self.gunshot_sound = mixer.Sound("./Sound/gunshot.mp3")
         self.shooting = False
         self.shooting_freeze = 0
         self.shooting_anim = []
@@ -114,6 +116,7 @@ class Enemy(pygame.sprite.Sprite):
         else:
             self.kill()
     def fire(self, player):
+        self.gunshot_sound.play()
         self.shooting = True
         shot = random.randrange(0,9)
         if shot > 3:

@@ -1,7 +1,7 @@
 from os import path
 import pygame
 from pygame import mouse
-
+from pygame import mixer
 
 
 class Player(pygame.sprite.Sprite):
@@ -28,6 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.walking.append(pygame.image.load("./sprites/hajduk/walk 5.png").convert_alpha())
         self.walking.append(pygame.image.load("./sprites/hajduk/walk 6.png").convert_alpha())
 
+        self.gunshot_sound = mixer.Sound("./Sound/gunshot.mp3")
         self.shooting = False
         self.shooting_freeze = 0
         self.shooting_anim = []
@@ -79,7 +80,7 @@ class Player(pygame.sprite.Sprite):
         self.weapon = weapon
         self.shot = False
 
-        self.ammo = 100
+        self.ammo = 6
         self.reloading = False
         self.reload_timer = 0
 
@@ -100,6 +101,7 @@ class Player(pygame.sprite.Sprite):
                 self.reload()
             if self.shooting:
                 if self.shooting_freeze == 0:
+                    self.gunshot_sound.play()
                     self.ammo -=1
                     for block in self.level:
                         shootline = block.rect.clipline(self.x, self.y, self.shot[0], self.shot[1])
