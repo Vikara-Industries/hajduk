@@ -82,7 +82,9 @@ class Enemy(pygame.sprite.Sprite):
             else:
                 self.rect.center = (self.x+5, self.y)
                 self.hitbox.topleft = (self.rect.topleft[0] + 12, self.rect.topleft[1])
-        else: self.die()
+        else: 
+            self.anim_speed = 0.07
+            self.die()
         self.animate()
         self.rect.center = (self.x, self.y)
 

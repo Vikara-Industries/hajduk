@@ -140,7 +140,7 @@ class Player(pygame.sprite.Sprite):
 
     def animate(self):
         if self.died == True:
-            
+            self.anim_speed = 0.07
             self.animation_list = self.death_anim
             if self.frame_index > len(self.animation_list):
                 self.frame_index = len(self.animation_list)
