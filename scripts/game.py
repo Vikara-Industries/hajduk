@@ -25,14 +25,25 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottomleft = (x,y)
 
+class Sceene:
+    def __init__(self):
+        self.interactables = []
+        self.colidables = []
+        self.enemies = []
+        self.player = False
+    
+    def update(self):
+        pass
 
 
 def main():
     pygame.init()
+    ######
     pygame.mixer.init()
     mixer.music.load("./Sound/The Underscore Orkestra - Balkan Nights.mp3")
     mixer.music.play(-1)
     mixer.music.set_volume(0.4)
+    ######
     SCREENW = 800
     SCREENH = SCREENW* 0.6
 
@@ -40,13 +51,16 @@ def main():
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREENW,SCREENH))
 
+####### IN SCEEN
+    bg = pygame.image.load("./sprites/bg/full Level.png").convert()
+    bg = pygame.transform.scale(bg,(SCREENW,SCREENH))
+
     GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,275,46)]
     COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
     ENEMIES = []
 
 
-
-
+####### HANDLE THIS IN SCEENE.UPDATE()
     random_spawn_timer = random.randint(2000,6000)
     random_pickup_timer = random.randint(10000,15000)
     enemy_spawner = pygame.USEREVENT +2
@@ -56,30 +70,25 @@ def main():
     pygame.time.set_timer(enemy_spawner,random_spawn_timer)
     pygame.time.set_timer(pickup_spawner,random_pickup_timer)
     enemy_group = pygame.sprite.Group()
+#######
 
 
-
-    bg = pygame.image.load("./sprites/bg/full Level.png").convert()
-    bg = pygame.transform.scale(bg,(SCREENW,SCREENH))
-
+####### POPULATE SPR GROUPS FROM SCEENE ARRAYS
     level_group = pygame.sprite.Group()
     interact_group = pygame.sprite.Group()
+    player_group = pygame.sprite.GroupSingle()
+
 
     for tile in COLIDABLES:
         interact_group.add(tile)
     for tile in GROUND:
         level_group.add(tile)
-
-
-    player_group = pygame.sprite.GroupSingle()
+    
     player = Player(GROUND,ENEMIES,20,50,Gun())
     player_group.add(player)
 
+#######
 
-
-
-
-    #spawn_counter = 0
     while True:
         clock.tick(60)
 
@@ -87,14 +96,13 @@ def main():
 
             if event.type == pygame.QUIT: sys.exit()
 
+
+######## HANDLE THIS IN SCEENE.UPDATE()
             if event.type == enemy_spawner:
-                #spawn_counter +=1
-                #print(spawn_counter)
                 spawn = random.choice([(50,145),(50,345),(750,135),(750,345)])
-                enemy = Enemy(spawn[0],spawn[1])#spawn_counter)
+                enemy = Enemy(spawn[0],spawn[1])
                 ENEMIES.append(enemy)
                 enemy_group.add(enemy)
-                #spawn_counter -= 1
 
             if event.type == pickup_spawner:
                 spawn = random.choice([(190,185),(500,180),(350,400)])
@@ -102,32 +110,28 @@ def main():
                     pickup = Ammo_box(spawn[0],spawn[1])
                 else: pickup = Hp_box(spawn[0],spawn[1])
                 interact_group.add(pickup)
+########
 
+        interact_group.update()
+        player_group.update()
+        enemy_group.update(player,GROUND)
 
         screen.blit(bg,(0,0))
         level_group.draw(screen)
-        interact_group.update()
         interact_group.draw(screen)
-
-        player_group.update()
         player.draw_ui(screen,myfont)
         player_group.draw(screen)
+        enemy_group.draw(screen)
 
-
-
-        #print(len(position_enemy))
+####### PUT THIS IN PLAYER
         player.interact_with = None
         for colidable in interact_group:
             if colidable.rect.collidepoint(player.hitbox.center):
                 if colidable == Ammo_box:
                     colidable.interact(player)
                 player.interact_with = colidable
-
+####### SEPERATE OUT UI
         if player.interact_with and not player.hiding:
             player.interact_with.draw_prompt(screen)
-
-        #print(enemy_group)
-        enemy_group.update(player,GROUND)
-        enemy_group.draw(screen)
 
         pygame.display.update()
