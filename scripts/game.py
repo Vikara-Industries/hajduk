@@ -25,20 +25,24 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottomleft = (x,y)
 
-class Sceene:
+class Scene:
     def __init__(self):
-        self.interactables = []
         self.colidables = []
+        self.interactables = []
         self.enemies = []
         self.player = False
     
     def update(self):
         pass
 
+level0 = Scene()
+level0.colidables = [Tile(floor,0,480,800,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,275,46)]
+level0.interactables = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
 
 def main():
     pygame.init()
-    ######
+    currentScene = level0
+    ###### Music settings and scene specific song
     pygame.mixer.init()
     mixer.music.load("./Sound/The Underscore Orkestra - Balkan Nights.mp3")
     mixer.music.play(-1)
@@ -54,10 +58,6 @@ def main():
 ####### IN SCEEN
     bg = pygame.image.load("./sprites/bg/full Level.png").convert()
     bg = pygame.transform.scale(bg,(SCREENW,SCREENH))
-
-    GROUND = [Tile(floor,0,480,SCREENW,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,275,46)]
-    COLIDABLES = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
-    ENEMIES = []
 
 
 ####### HANDLE THIS IN SCEENE.UPDATE()
@@ -79,12 +79,12 @@ def main():
     player_group = pygame.sprite.GroupSingle()
 
 
-    for tile in COLIDABLES:
+    for tile in currentScene.interactables:
         interact_group.add(tile)
-    for tile in GROUND:
+    for tile in currentScene.colidables:
         level_group.add(tile)
     
-    player = Player(GROUND,ENEMIES,20,50,Gun())
+    player = Player(currentScene.colidables,currentScene.enemies,20,50,Gun())
     player_group.add(player)
 
 #######
@@ -101,7 +101,7 @@ def main():
             if event.type == enemy_spawner:
                 spawn = random.choice([(50,145),(50,345),(750,135),(750,345)])
                 enemy = Enemy(spawn[0],spawn[1])
-                ENEMIES.append(enemy)
+                currentScene.enemies.append(enemy)
                 enemy_group.add(enemy)
 
             if event.type == pickup_spawner:
@@ -114,7 +114,7 @@ def main():
 
         interact_group.update()
         player_group.update()
-        enemy_group.update(player,GROUND)
+        enemy_group.update(player,currentScene.colidables)
 
         screen.blit(bg,(0,0))
         level_group.draw(screen)
