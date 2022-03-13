@@ -1,3 +1,4 @@
+from distutils.log import debug
 import pygame, sys
 from pygame.sprite import spritecollideany
 from pygame import mixer
@@ -31,6 +32,8 @@ class Scene:
         self.interactables = []
         self.enemies = []
         self.player = False
+        self.bg = False
+        self.music = False
     
     def update(self):
         pass
@@ -38,13 +41,16 @@ class Scene:
 level0 = Scene()
 level0.colidables = [Tile(floor,0,480,800,95), Tile(lplat,0,230,275,46),Tile(rplat,530,230,275,46)]
 level0.interactables = [Portal(0,385),Portal(0,180),Hide(140,380),Hide(560,380),Portal(720,385),Portal(720,180)]
+level0.music = "./Sound/The Underscore Orkestra - Balkan Nights.mp3"
+level0.bg = "./sprites/bg/full Level.png"
+level0.player = True
 
 def main():
     pygame.init()
     currentScene = level0
     ###### Music settings and scene specific song
     pygame.mixer.init()
-    mixer.music.load("./Sound/The Underscore Orkestra - Balkan Nights.mp3")
+    mixer.music.load(currentScene.music)
     mixer.music.play(-1)
     mixer.music.set_volume(0.4)
     ######
@@ -56,7 +62,7 @@ def main():
     screen = pygame.display.set_mode((SCREENW,SCREENH))
 
 ####### IN SCEEN
-    bg = pygame.image.load("./sprites/bg/full Level.png").convert()
+    bg = pygame.image.load(currentScene.bg).convert()
     bg = pygame.transform.scale(bg,(SCREENW,SCREENH))
 
 
@@ -83,9 +89,11 @@ def main():
         interact_group.add(tile)
     for tile in currentScene.colidables:
         level_group.add(tile)
-    
-    player = Player(currentScene.colidables,currentScene.enemies,20,50,Gun())
-    player_group.add(player)
+
+
+    if(currentScene.player):
+        player = Player(level0.colidables,level0.enemies,20,50,Gun())
+        player_group.add(player)
 
 #######
 
@@ -113,25 +121,26 @@ def main():
 ########
 
         interact_group.update()
-        player_group.update()
-        enemy_group.update(player,currentScene.colidables)
+        
 
         screen.blit(bg,(0,0))
         level_group.draw(screen)
         interact_group.draw(screen)
-        player.draw_ui(screen,myfont)
         player_group.draw(screen)
         enemy_group.draw(screen)
 
-####### PUT THIS IN PLAYER
-        player.interact_with = None
-        for colidable in interact_group:
-            if colidable.rect.collidepoint(player.hitbox.center):
-                if colidable == Ammo_box:
-                    colidable.interact(player)
-                player.interact_with = colidable
-####### SEPERATE OUT UI
-        if player.interact_with and not player.hiding:
-            player.interact_with.draw_prompt(screen)
+        if currentScene.player:
+            player_group.update()
+            enemy_group.update(player,currentScene.colidables)
+
+            player.draw_ui(screen,myfont)
+
+            player.interact_with = None
+            for interactable in interact_group:
+                if interactable.rect.collidepoint(player.hitbox.center):
+                    player.interact_with = interactable
+
+            if player.interact_with and not player.hiding:
+                player.interact_with.draw_prompt(screen)
 
         pygame.display.update()
